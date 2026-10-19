@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #f5f3ff;
+      border: 1px solid #ddd6fe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #7c3aed;
+    }
+    .box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10pt;
+      padding: 14pt 16pt;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #f1f5f9;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;">
+        <span class="tag">PHASE 04 • 2026.10.13 - 10.16 (CURRENT)</span>
+        <span style="font-size: 9pt; color: #64748b; font-weight: 500;">엔터프라이즈 SaaS & 에이전트 확장</span>
+      </div>
+      <h2 style="font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;">
+        PROJECT_42 휴가 결재 SaaS & 안티그래비티 스킬 내재화
+      </h2>
+    </div>
+    <div style="text-align: right;">
+      <p style="font-size: 8.5pt; color: #94a3b8; font-family: monospace;">Session Resume Workflow</p>
+      <p style="font-size: 11pt; font-weight: 700; color: #7c3aed;">SLIDE 07 / 09</p>
+    </div>
+  </div>
+
+  <!-- Content 2-Column Split -->
+  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16pt; margin: 12pt 0; flex: 1;">
+    
+    <!-- Left Project: PROJECT_42 -->
+    <div class="box" style="border-top: 3pt solid #7c3aed;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6pt;">
+          <h3 style="font-size: 12.5pt; font-weight: 700; color: #0f172a;">PROJECT_42 (휴가/근태 결재 시스템)</h3>
+          <span style="font-size: 7.5pt; padding: 2pt 6pt; background: #ede9fe; color: #5b21b6; font-weight: 600; border-radius: 4pt;">Next.js + Supabase SaaS</span>
+        </div>
+        <p style="font-size: 8.2pt; color: #64748b; line-height: 1.4; margin-bottom: 8pt;">
+          조직도 기반 전사 직원 휴가 신청, 상신, 다단계 승인 결재선 및 잔여 연차 차감 로직 구현.
+        </p>
+
+        <!-- Feature Points -->
+        <div style="display: flex; flex-direction: column; gap: 5pt;">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;">
+            <p style="font-size: 8pt; font-weight: 700; color: #0f172a;">✓ Supabase 실시간 결재 트랜잭션</p>
+            <p style="font-size: 7.8pt; color: #64748b;">휴가 승인 시 사용자 연차 잔여일수 자동 원자적 차감 및 히스토리 기록</p>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;">
+            <p style="font-size: 8pt; font-weight: 700; color: #0f172a;">✓ 대규모 세션 연속성 (Resume Session)</p>
+            <p style="font-size: 7.8pt; color: #64748b;">Session <code>b08b6483</code> (269 steps) → <code>ac16389f</code> (327 steps) 매끄러운 컨텍스트 승계</p>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;">
+        <span>누적 596+ Steps 인터랙션</span>
+        <span style="font-weight: 600; color: #7c3aed;">엔터프라이즈 프로덕션 수준</span>
+      </div>
+    </div>
+
+    <!-- Right: Anti-Gravity Custom Skills -->
+    <div class="box" style="border-top: 3pt solid #2563eb;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6pt;">
+          <h3 style="font-size: 12.5pt; font-weight: 700; color: #0f172a;">안티그래비티 글로벌 스킬 도입</h3>
+          <span style="font-size: 7.5pt; padding: 2pt 6pt; background: #dbeafe; color: #1e40af; font-weight: 600; border-radius: 4pt;">Skill System</span>
+        </div>
+        <p style="font-size: 8.2pt; color: #64748b; line-height: 1.4; margin-bottom: 8pt;">
+          에이전트에게 사내 코딩 컨벤션 및 특화 도구(MCP, 브라우징, 생성 UI) 권한 부여.
+        </p>
+
+        <!-- Feature Points -->
+        <div style="display: flex; flex-direction: column; gap: 5pt;">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;">
+            <p style="font-size: 8pt; font-weight: 700; color: #0f172a;">✓ Global Skills Installation</p>
+            <p style="font-size: 7.8pt; color: #64748b;">Session <code>efe3de19</code>를 통해 워크스페이스 전역 표준 스킬셋 배포</p>
+          </div>
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;">
+            <p style="font-size: 8pt; font-weight: 700; color: #0f172a;">✓ slides-grab 공식 파이프라인 연동</p>
+            <p style="font-size: 7.8pt; color: #64748b;">현재 세션(<code>3b513b1a</code>)에서 HTML 슬라이드 엔진 직접 구동</p>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;">
+        <span>Anti-Gravity Extensibility</span>
+        <span style="font-weight: 600; color: #2563eb;">AI 에이전트 자율성 극대화</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Key Takeaway Banner -->
+  <div style="background: #f1f5f9; border-radius: 6pt; padding: 8pt 12pt; display: flex; align-items: center; justify-content: space-between;">
+    <p style="font-size: 8.5pt; color: #334155; font-weight: 500;">
+      🎯 <b>Phase 4 시사점:</b> 이제 안티그래비티는 단순한 보조 코더가 아닌, <b>엔터프라이즈 SaaS 전체 라이프사이클과 스킬셋을 주도하는 코파일럿</b>으로 안착.
+    </p>
+    <span style="font-size: 8pt; color: #7c3aed; font-weight: 600;">Enterprise Copilot</span>
+  </div>
+</body>
+</html>

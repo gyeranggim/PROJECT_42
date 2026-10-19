@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #2563eb;
+      letter-spacing: 0.02em;
+    }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10pt;
+      padding: 14pt 16pt;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 12pt; border-bottom: 1px solid #f1f5f9;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;">
+        <span class="tag">EXECUTIVE SUMMARY</span>
+        <span style="font-size: 9pt; color: #64748b; font-weight: 500;">세션 분석 종합 리포트</span>
+      </div>
+      <h2 style="font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;">
+        2달간의 안티그래비티 활용 핵심 성과 및 지표
+      </h2>
+    </div>
+    <div style="text-align: right;">
+      <p style="font-size: 8.5pt; color: #94a3b8; font-family: monospace;">PERIOD: 2026.10</p>
+      <p style="font-size: 11pt; font-weight: 700; color: #2563eb;">SLIDE 02 / 09</p>
+    </div>
+  </div>
+
+  <!-- Content 2-Column Grid -->
+  <div style="display: grid; grid-template-columns: 200pt 1fr; gap: 16pt; margin: 12pt 0; flex: 1;">
+    <!-- Left: Quant Metrics Column -->
+    <div style="display: flex; flex-direction: column; gap: 8pt;">
+      <div class="card" style="border-left: 3pt solid #2563eb; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+        <p style="font-size: 8pt; color: #64748b; font-weight: 600; text-transform: uppercase;">Total Active Sessions</p>
+        <p style="font-size: 24pt; font-weight: 800; color: #0f172a; margin-top: 2pt;">17 <span style="font-size: 10pt; color: #2563eb; font-weight: 600;">개 세션</span></p>
+        <p style="font-size: 8pt; color: #94a3b8; margin-top: 2pt;">단발성 질의부터 500+ 스텝의 장기 프로젝트까지</p>
+      </div>
+
+      <div class="card" style="border-left: 3pt solid #10b981; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+        <p style="font-size: 8pt; color: #64748b; font-weight: 600; text-transform: uppercase;">Full Implementations</p>
+        <p style="font-size: 24pt; font-weight: 800; color: #0f172a; margin-top: 2pt;">8 <span style="font-size: 10pt; color: #10b981; font-weight: 600;">개 메인 앱</span></p>
+        <p style="font-size: 8pt; color: #94a3b8; margin-top: 2pt;">사내 비품·경비·CS·공구·근태 등 전 영역 커버</p>
+      </div>
+
+      <div class="card" style="border-left: 3pt solid #7c3aed; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+        <p style="font-size: 8pt; color: #64748b; font-weight: 600; text-transform: uppercase;">Max Interaction Step</p>
+        <p style="font-size: 24pt; font-weight: 800; color: #0f172a; margin-top: 2pt;">538 <span style="font-size: 10pt; color: #7c3aed; font-weight: 600;">Steps</span></p>
+        <p style="font-size: 8pt; color: #94a3b8; margin-top: 2pt;">branch sales management board 단일 세션</p>
+      </div>
+    </div>
+
+    <!-- Right: Key Pillars / Takeaways -->
+    <div style="display: flex; flex-direction: column; gap: 10pt; justify-content: space-between;">
+      <div class="card" style="background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2pt 6pt rgba(0,0,0,0.02);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4pt;">
+          <h4 style="font-size: 11pt; font-weight: 700; color: #0f172a;">1. 실무 페인포인트 기반 PRD 중심 기획 및 개발</h4>
+          <span style="font-size: 8pt; padding: 2pt 6pt; background: #f1f5f9; border-radius: 4pt; color: #475569; font-weight: 600;">Methodology</span>
+        </div>
+        <p style="font-size: 8.5pt; color: #475569; line-height: 1.5;">
+          단순 코드 생성을 넘어, "40인 인테리어사 비품 부족", "경비 정산 중복 지급 사고", "아파트 관리사무소 VOC 감정노동" 등 명확한 문제 정의(Problem Statement)로부터 체계적인 PRD를 우선 수립 후 개발 착수.
+        </p>
+      </div>
+
+      <div class="card" style="background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2pt 6pt rgba(0,0,0,0.02);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4pt;">
+          <h4 style="font-size: 11pt; font-weight: 700; color: #0f172a;">2. 경량 스크립트에서 클라우드 SaaS 아키텍처로 진화</h4>
+          <span style="font-size: 8pt; padding: 2pt 6pt; background: #ecfdf5; border-radius: 4pt; color: #059669; font-weight: 600;">Architecture</span>
+        </div>
+        <p style="font-size: 8.5pt; color: #475569; line-height: 1.5;">
+          초기 무설치 단일 HTML + GAS 연동 방식에서 Next.js 풀스택 프레임워크로 발전하였으며, 최종적으로 Supabase Cloud DB(PostgreSQL), Edge Functions, RLS 보안 정책이 결합된 엔터프라이즈 아키텍처 구축.
+        </p>
+      </div>
+
+      <div class="card" style="background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2pt 6pt rgba(0,0,0,0.02);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4pt;">
+          <h4 style="font-size: 11pt; font-weight: 700; color: #0f172a;">3. 안티그래비티 커스텀 스킬 및 세션 연속성(Resume) 내재화</h4>
+          <span style="font-size: 8pt; padding: 2pt 6pt; background: #f5f3ff; border-radius: 4pt; color: #7c3aed; font-weight: 600;">Productivity</span>
+        </div>
+        <p style="font-size: 8.5pt; color: #475569; line-height: 1.5;">
+          반복되는 프롬프트 작업을 자동화하기 위해 Anti-Gravity Global Skills를 도입하고, 수백 스텝에 걸친 대규모 작업을 세션 간 중단 없이 이어가는 'Resume Session' 워크플로우를 완벽히 정착시킴.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8pt; border-top: 1px solid #f1f5f9; font-size: 8pt; color: #94a3b8;">
+    <span>ANTIGRAVITY SESSION INTELLIGENCE REPORT</span>
+    <span>CONFIDENTIAL & PROPRIETARY</span>
+  </div>
+</body>
+</html>

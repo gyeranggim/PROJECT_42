@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #090d16;
+      color: #f8fafc;
+      padding: 36pt 48pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      bottom: -60pt;
+      right: -60pt;
+      width: 400pt;
+      height: 300pt;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.1) 40%, transparent 70%);
+      filter: blur(50px);
+      z-index: 0;
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6pt;
+      padding: 4pt 10pt;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 999pt;
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: #60a5fa;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="badge">
+        <span>NEXT HORIZON</span>
+        <span>•</span>
+        <span>FUTURE ROADMAP</span>
+      </div>
+      <p style="font-size: 10pt; color: #64748b; font-family: monospace;">SLIDE 09 / 09</p>
+    </div>
+
+    <!-- Center Content -->
+    <div>
+      <h2 style="font-size: 26pt; font-weight: 800; color: #ffffff; letter-spacing: -0.02em; margin-bottom: 8pt; line-height: 1.25;">
+        경량 프로토타입에서 엔터프라이즈 SaaS로,<br>
+        <span style="background: linear-gradient(90deg, #60a5fa 0%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          안티그래비티와 함께한 2달간의 성공적 도약
+        </span>
+      </h2>
+      <p style="font-size: 10.5pt; color: #94a3b8; line-height: 1.6; max-width: 540pt; margin-bottom: 16pt;">
+        17개 세션, 2,500+ 스텝의 상호작용을 통해 입증된 안티그래비티의 신속성과 아키텍처 확장성은 향후 사내 업무 시스템 전반의 디지털 전환을 이끄는 핵심 동력이 될 것입니다.
+      </p>
+
+      <!-- Next Steps Grid -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12pt;">
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8pt; padding: 12pt;">
+          <p style="font-size: 8pt; color: #60a5fa; font-weight: 700; margin-bottom: 3pt;">01. PRODUCTION STABILIZATION</p>
+          <h4 style="font-size: 10.5pt; font-weight: 700; color: #f8fafc; margin-bottom: 4pt;">PROJECT_42 전사 배포</h4>
+          <p style="font-size: 8pt; color: #94a3b8; line-height: 1.4;">실제 임직원 근태/휴가 결재 시스템 적용 및 피드백 기반 안정화</p>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8pt; padding: 12pt;">
+          <p style="font-size: 8pt; color: #34d399; font-weight: 700; margin-bottom: 3pt;">02. INTEGRATED PORTAL</p>
+          <h4 style="font-size: 10.5pt; font-weight: 700; color: #f8fafc; margin-bottom: 4pt;">사내 도구 통합 대시보드</h4>
+          <p style="font-size: 8pt; color: #94a3b8; line-height: 1.4;">비품·경비·CS·지점매출 개별 도구의 단일 SSO 포털 연계 구축</p>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8pt; padding: 12pt;">
+          <p style="font-size: 8pt; color: #a78bfa; font-weight: 700; margin-bottom: 3pt;">03. AGY SKILL EXTENSION</p>
+          <h4 style="font-size: 10.5pt; font-weight: 700; color: #f8fafc; margin-bottom: 4pt;">도메인 맞춤형 스킬 자산화</h4>
+          <p style="font-size: 8pt; color: #94a3b8; line-height: 1.4;">사내 비즈니스 로직 및 감사 규정을 Antigravity 스킬로 공식 등록</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10pt; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+      <p style="font-size: 9pt; color: #64748b;">
+        Created with <span style="color: #60a5fa; font-weight: 600;">slides-grab</span> Semantic HTML Engine
+      </p>
+      <p style="font-size: 9pt; color: #94a3b8;">
+        Antigravity Pair-Programming Retrospective • October 2026
+      </p>
+    </div>
+  </div>
+</body>
+</html>

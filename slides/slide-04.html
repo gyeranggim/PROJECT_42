@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #2563eb;
+    }
+    .project-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10pt;
+      padding: 16pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .badge-pill {
+      font-size: 7.5pt;
+      font-weight: 600;
+      padding: 2pt 6pt;
+      border-radius: 3pt;
+      background: #e2e8f0;
+      color: #334155;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #f1f5f9;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;">
+        <span class="tag">PHASE 01 • 2026.10.01</span>
+        <span style="font-size: 9pt; color: #64748b; font-weight: 500;">신속한 현장 업무 자동화</span>
+      </div>
+      <h2 style="font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;">
+        경량 사내 도구 & 단일 HTML 아키텍처
+      </h2>
+    </div>
+    <div style="text-align: right;">
+      <p style="font-size: 8.5pt; color: #94a3b8; font-family: monospace;">Zero Server Cost</p>
+      <p style="font-size: 11pt; font-weight: 700; color: #2563eb;">SLIDE 04 / 09</p>
+    </div>
+  </div>
+
+  <!-- Content 2-Column Split -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16pt; margin: 12pt 0; flex: 1;">
+    
+    <!-- Left Project: STOCKLIST -->
+    <div class="project-card" style="border-top: 3pt solid #3b82f6;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8pt;">
+          <h3 style="font-size: 13pt; font-weight: 700; color: #0f172a;">STOCKLIST (비품 재고 관리)</h3>
+          <span class="badge-pill" style="background: #dbeafe; color: #1e40af;">GAS + Single HTML</span>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6pt; padding: 8pt 10pt; margin-bottom: 8pt;">
+          <p style="font-size: 8pt; color: #ef4444; font-weight: 600; margin-bottom: 2pt;">🚨 문제 정의 (Problem)</p>
+          <p style="font-size: 8.2pt; color: #475569; line-height: 1.45;">
+            40인 인테리어 회사에서 엑셀 대장과 실제 창고 재고 불일치. 직원이 비품 반출 시 기록하지 않아 빈번한 결품 발생.
+          </p>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6pt; padding: 8pt 10pt;">
+          <p style="font-size: 8pt; color: #10b981; font-weight: 600; margin-bottom: 2pt;">💡 해결 방안 (Solution)</p>
+          <p style="font-size: 8.2pt; color: #475569; line-height: 1.45;">
+            별도 앱 설치 없이 브라우저로 여는 단일 <code>index.html</code> 구축. Google Apps Script(<code>Code.gs</code>)와 스프레드시트를 백엔드로 연동하여 실시간 입출고 동기화.
+          </p>
+        </div>
+      </div>
+      <div style="margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;">
+        <span>Session: <code>4118a1e8</code></span>
+        <span style="font-weight: 600; color: #2563eb;">배포: 사내 즉시 배포 완료</span>
+      </div>
+    </div>
+
+    <!-- Right Project: EDU_CHECKLIST -->
+    <div class="project-card" style="border-top: 3pt solid #10b981;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8pt;">
+          <h3 style="font-size: 13pt; font-weight: 700; color: #0f172a;">EDU_CHECKLIST (의무교육 대시보드)</h3>
+          <span class="badge-pill" style="background: #d1fae5; color: #065f46;">CSV Client Engine</span>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6pt; padding: 8pt 10pt; margin-bottom: 8pt;">
+          <p style="font-size: 8pt; color: #ef4444; font-weight: 600; margin-bottom: 2pt;">🚨 문제 정의 (Problem)</p>
+          <p style="font-size: 8.2pt; color: #475569; line-height: 1.45;">
+            사내 법정 의무교육 이수 명단(수백 행 CSV)을 일일이 수작업 필터링하여 미이수자 독려 메일을 발송하는 비효율 발생.
+          </p>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6pt; padding: 8pt 10pt;">
+          <p style="font-size: 8pt; color: #10b981; font-weight: 600; margin-bottom: 2pt;">💡 해결 방안 (Solution)</p>
+          <p style="font-size: 8.2pt; color: #475569; line-height: 1.45;">
+            <code>hangyul_sample.csv</code> 등 사내 교육 데이터를 브라우저에서 드래그앤드롭으로 즉시 분석. 부서별 이수율 통계 및 미이수자 자동 리스트업 UI 제공.
+          </p>
+        </div>
+      </div>
+      <div style="margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;">
+        <span>Session: <code>d708be15</code></span>
+        <span style="font-weight: 600; color: #10b981;">성과: 교육 관리 공수 80% 절감</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Key Takeaway Banner -->
+  <div style="background: #f1f5f9; border-radius: 6pt; padding: 8pt 12pt; display: flex; align-items: center; justify-content: space-between;">
+    <p style="font-size: 8.5pt; color: #334155; font-weight: 500;">
+      🎯 <b>Phase 1 시사점:</b> 복잡한 인프라 셋업 없이, <b>단일 파일 기반 빠른 프로토타이핑</b>으로 현업 실무자의 당면 과제를 24시간 내 해결.
+    </p>
+    <span style="font-size: 8pt; color: #2563eb; font-weight: 600;">Fast Feedback Loop</span>
+  </div>
+</body>
+</html>

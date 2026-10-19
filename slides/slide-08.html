@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #2563eb;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+    }
+    th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      text-align: left;
+      padding: 6pt 10pt;
+      border-bottom: 2pt solid #cbd5e1;
+    }
+    td {
+      padding: 6pt 10pt;
+      border-bottom: 1px solid #e2e8f0;
+      color: #475569;
+    }
+    .step-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6pt;
+      padding: 8pt 10pt;
+      flex: 1;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #f1f5f9;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;">
+        <span class="tag">TECH & METHODOLOGY</span>
+        <span style="font-size: 9pt; color: #64748b; font-weight: 500;">기술 스택 진화 및 생산성 분석</span>
+      </div>
+      <h2 style="font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;">
+        아키텍처 확장 패턴 & 에이전트 협업 사이클
+      </h2>
+    </div>
+    <div style="text-align: right;">
+      <p style="font-size: 8.5pt; color: #94a3b8; font-family: monospace;">Architecture Evolution</p>
+      <p style="font-size: 11pt; font-weight: 700; color: #2563eb;">SLIDE 08 / 09</p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div style="margin: 10pt 0; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+    
+    <!-- Table: Architecture Comparison -->
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8pt; overflow: hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 15%;">단계 (Stage)</th>
+            <th style="width: 25%;">대표 프로젝트</th>
+            <th style="width: 35%;">기술 스택 (Tech Stack)</th>
+            <th style="width: 25%;">아키텍처 가치</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight: 700; color: #3b82f6;">Stage 1 (초기)</td>
+            <td>STOCKLIST, EDU_CHECKLIST</td>
+            <td>Single HTML5, Google Apps Script, CSV</td>
+            <td>설치 없는 즉각 배포, 제로 인프라 비용</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700; color: #10b981;">Stage 2 (중기)</td>
+            <td>경비정산검사기, 리뷰 분석기</td>
+            <td>Next.js, Tailwind CSS, Rule Engine, CSV</td>
+            <td>복잡한 정책 감사 알고리즘, 정적 타입 안정성</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700; color: #f59e0b;">Stage 3 (도메인)</td>
+            <td>스마트 관리소 민원ON, AptGonggu</td>
+            <td>Vite, Bun, Tailwind, Local Storage/BaaS</td>
+            <td>도메인 특화 VOC 감정노동 경감, 주문 자동화</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700; color: #8b5cf6;">Stage 4 (엔터프라이즈)</td>
+            <td>PROJECT_42, 지점 매출 보드</td>
+            <td>Supabase Cloud, PostgreSQL, AGY Skills</td>
+            <td>클라우드 DB 트랜잭션, 글로벌 스킬 내재화</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Agent Workflow Flowchart -->
+    <div>
+      <p style="font-size: 8.5pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;">
+        🔄 확립된 표준 안티그래비티 페어 프로그래밍 워크플로우
+      </p>
+      <div style="display: flex; gap: 8pt; align-items: center;">
+        <div class="step-box" style="border-top: 2pt solid #3b82f6;">
+          <p style="font-size: 7.5pt; color: #3b82f6; font-weight: 700;">STEP 01</p>
+          <p style="font-size: 8.5pt; font-weight: 700; color: #0f172a;">PRD 작성 및 문제 정의</p>
+          <p style="font-size: 7.2pt; color: #64748b; margin-top: 2pt;">현업 페인포인트 기반 요구사항 명세화</p>
+        </div>
+        <span style="color: #94a3b8; font-size: 11pt;">→</span>
+        <div class="step-box" style="border-top: 2pt solid #10b981;">
+          <p style="font-size: 7.5pt; color: #10b981; font-weight: 700;">STEP 02</p>
+          <p style="font-size: 8.5pt; font-weight: 700; color: #0f172a;">데이터 모델링 & 스키마</p>
+          <p style="font-size: 7.2pt; color: #64748b; margin-top: 2pt;">Supabase DB 테이블 / CSV 규격 확정</p>
+        </div>
+        <span style="color: #94a3b8; font-size: 11pt;">→</span>
+        <div class="step-box" style="border-top: 2pt solid #f59e0b;">
+          <p style="font-size: 7.5pt; color: #f59e0b; font-weight: 700;">STEP 03</p>
+          <p style="font-size: 8.5pt; font-weight: 700; color: #0f172a;">컴포넌트 & 비즈니스 로직</p>
+          <p style="font-size: 7.2pt; color: #64748b; margin-top: 2pt;">에이전트 실시간 페어 코딩 & 반응형 UI</p>
+        </div>
+        <span style="color: #94a3b8; font-size: 11pt;">→</span>
+        <div class="step-box" style="border-top: 2pt solid #8b5cf6;">
+          <p style="font-size: 7.5pt; color: #8b5cf6; font-weight: 700;">STEP 04</p>
+          <p style="font-size: 8.5pt; font-weight: 700; color: #0f172a;">빌드 검증 & 세션 승계</p>
+          <p style="font-size: 7.2pt; color: #64748b; margin-top: 2pt;">테스트 실행, 배포, Resume Session</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 6pt; border-top: 1px solid #f1f5f9; font-size: 8pt; color: #94a3b8;">
+    <span>REPEATABLE AGENTIC SOFTWARE ENGINEERING LIFECYCLE</span>
+    <span>HIGH VELOCITY & RELIABILITY</span>
+  </div>
+</body>
+</html>

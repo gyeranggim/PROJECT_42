@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --canvas-warm: #f2f0eb;
+  --canvas-ceramic: #edebe9;
+  --brand-green: #006241;
+  --green-accent: #00754A;
+  --house-green: #1E3932;
+  --gold: #cba258;
+  --text-dark: rgba(0, 0, 0, 0.87);
+  --text-muted: rgba(0, 0, 0, 0.58);
+}
+
+body {
+  color: var(--text-dark);
+  background-color: var(--canvas-warm);
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Full-pill 버튼 마이크로 인터랙션 (DESIGN.md 명세: scale(0.95)) */
+.btn-pill {
+  border-radius: 50px;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.btn-pill:active {
+  transform: scale(0.95);
+}
+
+/* DESIGN.md 카드 쉐도우 */
+.card-surface {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 0px 0.5px 0px rgba(0, 0, 0, 0.14), 0px 1px 1px 0px rgba(0, 0, 0, 0.24);
+}
+
+/* 다크 밴드 */
+.band-house {
+  background-color: #1E3932;
+  color: #ffffff;
+}
+
+/* 입력 필드 기본 포커스 링 */
+input:focus, textarea:focus, select:focus {
+  border-color: #00754A !important;
+  box-shadow: 0 0 0 1px #00754A !important;
+  outline: none !important;
+}

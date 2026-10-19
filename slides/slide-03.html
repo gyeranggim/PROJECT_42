@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #2563eb;
+    }
+    .timeline-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10pt;
+      padding: 14pt 12pt;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.2s;
+      box-shadow: 0 4pt 12pt rgba(0,0,0,0.02);
+    }
+    .phase-badge {
+      display: inline-block;
+      font-size: 7.5pt;
+      font-weight: 700;
+      padding: 2pt 6pt;
+      border-radius: 3pt;
+      margin-bottom: 6pt;
+      width: fit-content;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #e2e8f0;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;">
+        <span class="tag">MASTER ROADMAP</span>
+        <span style="font-size: 9pt; color: #64748b; font-weight: 500;">4단계 핵심 개발 마일스톤</span>
+      </div>
+      <h2 style="font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;">
+        프로젝트 타임라인 & 단계별 진화 과정
+      </h2>
+    </div>
+    <div style="text-align: right;">
+      <p style="font-size: 8.5pt; color: #94a3b8; font-family: monospace;">2026.10.01 ~ 10.16</p>
+      <p style="font-size: 11pt; font-weight: 700; color: #2563eb;">SLIDE 03 / 09</p>
+    </div>
+  </div>
+
+  <!-- Timeline Cards Row -->
+  <div style="position: relative; margin: 16pt 0; flex: 1; display: flex; align-items: stretch;">
+    <!-- Horizontal connection bar behind dots -->
+    <div style="position: absolute; top: -14pt; left: 60pt; right: 60pt; height: 2pt; background: #cbd5e1; z-index: 0;"></div>
+
+    <div style="display: flex; gap: 12pt; width: 100%; position: relative; z-index: 1;">
+      
+      <!-- Phase 1 -->
+      <div class="timeline-card" style="border-top: 3pt solid #3b82f6;">
+        <div style="position: absolute; top: -20pt; left: 50%; transform: translateX(-50%); width: 14pt; height: 14pt; border-radius: 50%; background: #3b82f6; border: 2pt solid #ffffff; box-shadow: 0 0 0 2pt #3b82f6;"></div>
+        <span class="phase-badge" style="background: #eff6ff; color: #1d4ed8;">PHASE 01 • 10.01</span>
+        <h4 style="font-size: 11pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;">경량 사내 도구 & 단일 HTML</h4>
+        <p style="font-size: 8.2pt; color: #64748b; line-height: 1.45; margin-bottom: 8pt; flex: 1;">
+          설치 없는 단일 파일로 즉시 배포 가능한 현장 업무 도구 구축
+        </p>
+        <div style="background: #f8fafc; border-radius: 6pt; padding: 6pt 8pt; font-size: 7.8pt; color: #334155; line-height: 1.4;">
+          <p>• <b>STOCKLIST:</b> 비품 재고 관리</p>
+          <p>• <b>EDU_CHECKLIST:</b> 의무교육 대시보드</p>
+          <p style="color: #3b82f6; font-weight: 600; margin-top: 2pt;">Stack: HTML5, GAS, Sheets</p>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="timeline-card" style="border-top: 3pt solid #10b981;">
+        <div style="position: absolute; top: -20pt; left: 50%; transform: translateX(-50%); width: 14pt; height: 14pt; border-radius: 50%; background: #10b981; border: 2pt solid #ffffff; box-shadow: 0 0 0 2pt #10b981;"></div>
+        <span class="phase-badge" style="background: #ecfdf5; color: #047857;">PHASE 02 • 10.02-10.07</span>
+        <h4 style="font-size: 11pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;">데이터 감사 & AI 감성 분석</h4>
+        <p style="font-size: 8.2pt; color: #64748b; line-height: 1.45; margin-bottom: 8pt; flex: 1;">
+          Next.js 도입 및 규정 검증 룰 엔진, 클라우드 DB 연동 시작
+        </p>
+        <div style="background: #f8fafc; border-radius: 6pt; padding: 6pt 8pt; font-size: 7.8pt; color: #334155; line-height: 1.4;">
+          <p>• <b>경비정산검사기:</b> CSV 규정 감사</p>
+          <p>• <b>CUSTOMER_REVIEW:</b> VOC 분석</p>
+          <p style="color: #10b981; font-weight: 600; margin-top: 2pt;">Stack: Next.js, Supabase, AI</p>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="timeline-card" style="border-top: 3pt solid #f59e0b;">
+        <div style="position: absolute; top: -20pt; left: 50%; transform: translateX(-50%); width: 14pt; height: 14pt; border-radius: 50%; background: #f59e0b; border: 2pt solid #ffffff; box-shadow: 0 0 0 2pt #f59e0b;"></div>
+        <span class="phase-badge" style="background: #fffbeb; color: #b45309;">PHASE 03 • 10.08-10.12</span>
+        <h4 style="font-size: 11pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;">실무 밀착형 도메인 자동화</h4>
+        <p style="font-size: 8.2pt; color: #64748b; line-height: 1.45; margin-bottom: 8pt; flex: 1;">
+          아파트 관리사무소 VOC 및 공동구매 등 현업 비즈니스 솔루션
+        </p>
+        <div style="background: #f8fafc; border-radius: 6pt; padding: 6pt 8pt; font-size: 7.8pt; color: #334155; line-height: 1.4;">
+          <p>• <b>민원ON:</b> AI 민원 응대 빌더</p>
+          <p>• <b>AptGonggu:</b> 공구 주문 매니저</p>
+          <p>• <b>지점 매출 보드:</b> 500+ 스텝 완성</p>
+          <p style="color: #f59e0b; font-weight: 600; margin-top: 2pt;">Stack: Vite/Next, Bun, Tailwind</p>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="timeline-card" style="border-top: 3pt solid #8b5cf6;">
+        <div style="position: absolute; top: -20pt; left: 50%; transform: translateX(-50%); width: 14pt; height: 14pt; border-radius: 50%; background: #8b5cf6; border: 2pt solid #ffffff; box-shadow: 0 0 0 2pt #8b5cf6;"></div>
+        <span class="phase-badge" style="background: #f5f3ff; color: #6d28d9;">PHASE 04 • 10.13-10.16</span>
+        <h4 style="font-size: 11pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;">엔터프라이즈 SaaS & 스킬</h4>
+        <p style="font-size: 8.2pt; color: #64748b; line-height: 1.45; margin-bottom: 8pt; flex: 1;">
+          Supabase 결재 시스템 구축 및 안티그래비티 글로벌 스킬 통합
+        </p>
+        <div style="background: #f8fafc; border-radius: 6pt; padding: 6pt 8pt; font-size: 7.8pt; color: #334155; line-height: 1.4;">
+          <p>• <b>PROJECT_42:</b> 휴가 결재 시스템</p>
+          <p>• <b>Global Skills:</b> 커스텀 스킬 설치</p>
+          <p>• <b>Resume Flow:</b> 세션 연속성 확보</p>
+          <p style="color: #8b5cf6; font-weight: 600; margin-top: 2pt;">Stack: Supabase BaaS, AGY Skills</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8pt; border-top: 1px solid #e2e8f0; font-size: 8pt; color: #94a3b8;">
+    <span>CONTINUOUS AGENT PAIR-PROGRAMMING LIFECYCLE</span>
+    <span>4 PHASES OVER 17 SESSIONS</span>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>안티그래비티 2달간 작업 세션 타임라인 리포트</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #090d16;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #f8fafc;
+    }
+
+    .viewer-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation bar */
+    .nav-bar {
+      height: 52px;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(37, 99, 235, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #60a5fa;
+    }
+
+    .nav-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-bar button {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .nav-bar button:hover:not(:disabled) {
+      background: #2563eb;
+      border-color: #3b82f6;
+    }
+
+    .nav-bar button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      color: #f8fafc;
+      font-size: 14px;
+      font-weight: 600;
+      min-width: 70px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-fs {
+      padding: 6px 12px !important;
+      font-size: 12px !important;
+    }
+
+    /* Slide viewport */
+    .viewport {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      background: #020617;
+    }
+
+    /* Scaler for 720pt x 405pt = 960px x 540px */
+    .scaler {
+      width: 960px;
+      height: 540px;
+      position: relative;
+      transform-origin: center center;
+      flex-shrink: 0;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .slide-frame {
+      width: 960px;
+      height: 540px;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      background: #ffffff;
+    }
+
+    .slide-frame.active {
+      display: block;
+    }
+
+    /* Bottom quick navigation dots */
+    .bottom-dots {
+      height: 38px;
+      background: #090d16;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 24px;
+      height: 5px;
+      background: #334155;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dot.active {
+      background: #3b82f6;
+      width: 44px;
+    }
+  </style>
+</head>
+<body>
+  <div class="viewer-container">
+    <!-- Top Navigation -->
+    <div class="nav-bar">
+      <div class="nav-left">
+        <span class="brand-badge">slides-grab</span>
+        <span class="nav-title">안티그래비티 작업 세션 타임라인 리포트</span>
+      </div>
+
+      <div class="nav-center">
+        <button id="btn-prev" title="Previous (Left Arrow)">← 이전</button>
+        <div class="slide-counter" id="counter">1 / 9</div>
+        <button id="btn-next" title="Next (Right Arrow / Space)">다음 →</button>
+      </div>
+
+      <div class="nav-right">
+        <button id="btn-fs" class="btn-fs" title="Fullscreen (F)">전체화면 [F]</button>
+      </div>
+    </div>
+
+    <!-- Viewport Area -->
+    <div class="viewport" id="viewport">
+      <div class="scaler" id="scaler">
+        <iframe class="slide-frame active" data-slide="1" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css&quot;&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: &#39;Pretendard&#39;, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #090d16;
+      color: #f8fafc;
+      padding: 36pt 48pt;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Background subtle mesh glow */
+    body::before {
+      content: &#39;&#39;;
+      position: absolute;
+      top: -100pt;
+      right: -80pt;
+      width: 420pt;
+      height: 380pt;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(124, 58, 237, 0.12) 40%, transparent 70%);
+      filter: blur(40px);
+      z-index: 0;
+    }
+    body::after {
+      content: &#39;&#39;;
+      position: absolute;
+      bottom: -60pt;
+      left: 10%;
+      width: 320pt;
+      height: 200pt;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+      filter: blur(50px);
+      z-index: 0;
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6pt;
+      padding: 4pt 10pt;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 999pt;
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: #60a5fa;
+      letter-spacing: 0.04em;
+    }
+    .badge-dot {
+      width: 5pt;
+      height: 5pt;
+      background: #38bdf8;
+      border-radius: 50%;
+      box-shadow: 0 0 6pt #38bdf8;
+    }
+    .meta-tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4pt;
+      font-size: 8.5pt;
+      color: #94a3b8;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class=&quot;content&quot;&gt;
+    &lt;!-- Header bar --&gt;
+    &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center;&quot;&gt;
+      &lt;div style=&quot;display: flex; align-items: center; gap: 12pt;&quot;&gt;
+        &lt;div class=&quot;badge&quot;&gt;
+          &lt;span class=&quot;badge-dot&quot;&gt;&lt;/span&gt;
+          ANTIGRAVITY DEV ARCHIVE
+        &lt;/div&gt;
+        &lt;span class=&quot;meta-tag&quot;&gt;2-MONTH SESSION RETROSPECTIVE&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;display: flex; align-items: center; gap: 6pt; font-size: 9pt; color: #64748b;&quot;&gt;
+        &lt;span&gt;PROJECTS_TIMELINE&lt;/span&gt;
+        &lt;span style=&quot;color: #3b82f6;&quot;&gt;●&lt;/span&gt;
+        &lt;span&gt;2026.10&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Center Hero --&gt;
+    &lt;div style=&quot;margin-top: 10pt;&quot;&gt;
+      &lt;p style=&quot;font-size: 13pt; font-weight: 500; color: #38bdf8; letter-spacing: -0.01em; margin-bottom: 8pt;&quot;&gt;
+        안티그래비티 작업 세션 데이터 종합 타임라인
+      &lt;/p&gt;
+      &lt;h1 style=&quot;font-size: 34pt; font-weight: 800; line-height: 1.18; color: #ffffff; letter-spacing: -0.03em;&quot;&gt;
+        단일 HTML 사내 도구에서&lt;br&gt;
+        &lt;span style=&quot;background: linear-gradient(90deg, #60a5fa 0%, #a78bfa 60%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;&quot;&gt;
+          풀스택 Supabase SaaS
+        &lt;/span&gt;까지의 진화
+      &lt;/h1&gt;
+      &lt;p style=&quot;font-size: 11pt; color: #94a3b8; margin-top: 14pt; line-height: 1.6; max-width: 520pt;&quot;&gt;
+        2달간 축적된 17개 세션 및 2,500+ 에이전트 인터랙션을 정밀 분석하여, 비품 관리·경비 정산·VOC 감성 분석·스마트 관리사무소·근태 SaaS로 이어진 프로젝트 발전 흐름을 타임라인으로 조망합니다.
+      &lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Footer Stats Grid --&gt;
+    &lt;div style=&quot;display: grid; grid-template-columns: repeat(4, 1fr); gap: 12pt; padding-top: 16pt; border-top: 1px solid rgba(255, 255, 255, 0.08);&quot;&gt;
+      &lt;div style=&quot;background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8pt; padding: 10pt 14pt;&quot;&gt;
+        &lt;p style=&quot;font-size: 8.5pt; color: #64748b; font-weight: 500; margin-bottom: 2pt;&quot;&gt;TOTAL SESSIONS&lt;/p&gt;
+        &lt;p style=&quot;font-size: 18pt; font-weight: 700; color: #f8fafc;&quot;&gt;17 &lt;span style=&quot;font-size: 9.5pt; color: #38bdf8; font-weight: 500;&quot;&gt;Sessions&lt;/span&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8pt; padding: 10pt 14pt;&quot;&gt;
+        &lt;p style=&quot;font-size: 8.5pt; color: #64748b; font-weight: 500; margin-bottom: 2pt;&quot;&gt;CORE PROJECTS&lt;/p&gt;
+        &lt;p style=&quot;font-size: 18pt; font-weight: 700; color: #f8fafc;&quot;&gt;8 &lt;span style=&quot;font-size: 9.5pt; color: #a78bfa; font-weight: 500;&quot;&gt;Products&lt;/span&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8pt; padding: 10pt 14pt;&quot;&gt;
+        &lt;p style=&quot;font-size: 8.5pt; color: #64748b; font-weight: 500; margin-bottom: 2pt;&quot;&gt;CUMULATIVE STEPS&lt;/p&gt;
+        &lt;p style=&quot;font-size: 18pt; font-weight: 700; color: #f8fafc;&quot;&gt;2,500+ &lt;span style=&quot;font-size: 9.5pt; color: #34d399; font-weight: 500;&quot;&gt;Steps&lt;/span&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8pt; padding: 10pt 14pt;&quot;&gt;
+        &lt;p style=&quot;font-size: 8.5pt; color: #64748b; font-weight: 500; margin-bottom: 2pt;&quot;&gt;PRIMARY STACK&lt;/p&gt;
+        &lt;p style=&quot;font-size: 15pt; font-weight: 700; color: #f8fafc; line-height: 1.3;&quot;&gt;Next.js &lt;span style=&quot;font-size: 9.5pt; color: #fbbf24; font-weight: 500;&quot;&gt;+ Supabase&lt;/span&gt;&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-same-origin allow-scripts"></iframe>
+        <iframe class="slide-frame" data-slide="2" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css&quot;&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: &#39;Pretendard&#39;, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #2563eb;
+      letter-spacing: 0.02em;
+    }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10pt;
+      padding: 14pt 16pt;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- Header --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 12pt; border-bottom: 1px solid #f1f5f9;&quot;&gt;
+    &lt;div&gt;
+      &lt;div style=&quot;display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;&quot;&gt;
+        &lt;span class=&quot;tag&quot;&gt;EXECUTIVE SUMMARY&lt;/span&gt;
+        &lt;span style=&quot;font-size: 9pt; color: #64748b; font-weight: 500;&quot;&gt;세션 분석 종합 리포트&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;h2 style=&quot;font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;&quot;&gt;
+        2달간의 안티그래비티 활용 핵심 성과 및 지표
+      &lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;text-align: right;&quot;&gt;
+      &lt;p style=&quot;font-size: 8.5pt; color: #94a3b8; font-family: monospace;&quot;&gt;PERIOD: 2026.10&lt;/p&gt;
+      &lt;p style=&quot;font-size: 11pt; font-weight: 700; color: #2563eb;&quot;&gt;SLIDE 02 / 09&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Content 2-Column Grid --&gt;
+  &lt;div style=&quot;display: grid; grid-template-columns: 200pt 1fr; gap: 16pt; margin: 12pt 0; flex: 1;&quot;&gt;
+    &lt;!-- Left: Quant Metrics Column --&gt;
+    &lt;div style=&quot;display: flex; flex-direction: column; gap: 8pt;&quot;&gt;
+      &lt;div class=&quot;card&quot; style=&quot;border-left: 3pt solid #2563eb; flex: 1; display: flex; flex-direction: column; justify-content: center;&quot;&gt;
+        &lt;p style=&quot;font-size: 8pt; color: #64748b; font-weight: 600; text-transform: uppercase;&quot;&gt;Total Active Sessions&lt;/p&gt;
+        &lt;p style=&quot;font-size: 24pt; font-weight: 800; color: #0f172a; margin-top: 2pt;&quot;&gt;17 &lt;span style=&quot;font-size: 10pt; color: #2563eb; font-weight: 600;&quot;&gt;개 세션&lt;/span&gt;&lt;/p&gt;
+        &lt;p style=&quot;font-size: 8pt; color: #94a3b8; margin-top: 2pt;&quot;&gt;단발성 질의부터 500+ 스텝의 장기 프로젝트까지&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;card&quot; style=&quot;border-left: 3pt solid #10b981; flex: 1; display: flex; flex-direction: column; justify-content: center;&quot;&gt;
+        &lt;p style=&quot;font-size: 8pt; color: #64748b; font-weight: 600; text-transform: uppercase;&quot;&gt;Full Implementations&lt;/p&gt;
+        &lt;p style=&quot;font-size: 24pt; font-weight: 800; color: #0f172a; margin-top: 2pt;&quot;&gt;8 &lt;span style=&quot;font-size: 10pt; color: #10b981; font-weight: 600;&quot;&gt;개 메인 앱&lt;/span&gt;&lt;/p&gt;
+        &lt;p style=&quot;font-size: 8pt; color: #94a3b8; margin-top: 2pt;&quot;&gt;사내 비품·경비·CS·공구·근태 등 전 영역 커버&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;card&quot; style=&quot;border-left: 3pt solid #7c3aed; flex: 1; display: flex; flex-direction: column; justify-content: center;&quot;&gt;
+        &lt;p style=&quot;font-size: 8pt; color: #64748b; font-weight: 600; text-transform: uppercase;&quot;&gt;Max Interaction Step&lt;/p&gt;
+        &lt;p style=&quot;font-size: 24pt; font-weight: 800; color: #0f172a; margin-top: 2pt;&quot;&gt;538 &lt;span style=&quot;font-size: 10pt; color: #7c3aed; font-weight: 600;&quot;&gt;Steps&lt;/span&gt;&lt;/p&gt;
+        &lt;p style=&quot;font-size: 8pt; color: #94a3b8; margin-top: 2pt;&quot;&gt;branch sales management board 단일 세션&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Right: Key Pillars / Takeaways --&gt;
+    &lt;div style=&quot;display: flex; flex-direction: column; gap: 10pt; justify-content: space-between;&quot;&gt;
+      &lt;div class=&quot;card&quot; style=&quot;background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2pt 6pt rgba(0,0,0,0.02);&quot;&gt;
+        &lt;div style=&quot;display: flex; align-items: center; justify-content: space-between; margin-bottom: 4pt;&quot;&gt;
+          &lt;h4 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a;&quot;&gt;1. 실무 페인포인트 기반 PRD 중심 기획 및 개발&lt;/h4&gt;
+          &lt;span style=&quot;font-size: 8pt; padding: 2pt 6pt; background: #f1f5f9; border-radius: 4pt; color: #475569; font-weight: 600;&quot;&gt;Methodology&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 8.5pt; color: #475569; line-height: 1.5;&quot;&gt;
+          단순 코드 생성을 넘어, &quot;40인 인테리어사 비품 부족&quot;, &quot;경비 정산 중복 지급 사고&quot;, &quot;아파트 관리사무소 VOC 감정노동&quot; 등 명확한 문제 정의(Problem Statement)로부터 체계적인 PRD를 우선 수립 후 개발 착수.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;card&quot; style=&quot;background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2pt 6pt rgba(0,0,0,0.02);&quot;&gt;
+        &lt;div style=&quot;display: flex; align-items: center; justify-content: space-between; margin-bottom: 4pt;&quot;&gt;
+          &lt;h4 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a;&quot;&gt;2. 경량 스크립트에서 클라우드 SaaS 아키텍처로 진화&lt;/h4&gt;
+          &lt;span style=&quot;font-size: 8pt; padding: 2pt 6pt; background: #ecfdf5; border-radius: 4pt; color: #059669; font-weight: 600;&quot;&gt;Architecture&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 8.5pt; color: #475569; line-height: 1.5;&quot;&gt;
+          초기 무설치 단일 HTML + GAS 연동 방식에서 Next.js 풀스택 프레임워크로 발전하였으며, 최종적으로 Supabase Cloud DB(PostgreSQL), Edge Functions, RLS 보안 정책이 결합된 엔터프라이즈 아키텍처 구축.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;card&quot; style=&quot;background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2pt 6pt rgba(0,0,0,0.02);&quot;&gt;
+        &lt;div style=&quot;display: flex; align-items: center; justify-content: space-between; margin-bottom: 4pt;&quot;&gt;
+          &lt;h4 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a;&quot;&gt;3. 안티그래비티 커스텀 스킬 및 세션 연속성(Resume) 내재화&lt;/h4&gt;
+          &lt;span style=&quot;font-size: 8pt; padding: 2pt 6pt; background: #f5f3ff; border-radius: 4pt; color: #7c3aed; font-weight: 600;&quot;&gt;Productivity&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 8.5pt; color: #475569; line-height: 1.5;&quot;&gt;
+          반복되는 프롬프트 작업을 자동화하기 위해 Anti-Gravity Global Skills를 도입하고, 수백 스텝에 걸친 대규모 작업을 세션 간 중단 없이 이어가는 &#39;Resume Session&#39; 워크플로우를 완벽히 정착시킴.
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Footer --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; padding-top: 8pt; border-top: 1px solid #f1f5f9; font-size: 8pt; color: #94a3b8;&quot;&gt;
+    &lt;span&gt;ANTIGRAVITY SESSION INTELLIGENCE REPORT&lt;/span&gt;
+    &lt;span&gt;CONFIDENTIAL &amp; PROPRIETARY&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-same-origin allow-scripts"></iframe>
+        <iframe class="slide-frame" data-slide="3" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css&quot;&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: &#39;Pretendard&#39;, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #2563eb;
+    }
+    .timeline-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10pt;
+      padding: 14pt 12pt;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.2s;
+      box-shadow: 0 4pt 12pt rgba(0,0,0,0.02);
+    }
+    .phase-badge {
+      display: inline-block;
+      font-size: 7.5pt;
+      font-weight: 700;
+      padding: 2pt 6pt;
+      border-radius: 3pt;
+      margin-bottom: 6pt;
+      width: fit-content;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- Header --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #e2e8f0;&quot;&gt;
+    &lt;div&gt;
+      &lt;div style=&quot;display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;&quot;&gt;
+        &lt;span class=&quot;tag&quot;&gt;MASTER ROADMAP&lt;/span&gt;
+        &lt;span style=&quot;font-size: 9pt; color: #64748b; font-weight: 500;&quot;&gt;4단계 핵심 개발 마일스톤&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;h2 style=&quot;font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;&quot;&gt;
+        프로젝트 타임라인 &amp; 단계별 진화 과정
+      &lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;text-align: right;&quot;&gt;
+      &lt;p style=&quot;font-size: 8.5pt; color: #94a3b8; font-family: monospace;&quot;&gt;2026.10.01 ~ 10.16&lt;/p&gt;
+      &lt;p style=&quot;font-size: 11pt; font-weight: 700; color: #2563eb;&quot;&gt;SLIDE 03 / 09&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Timeline Cards Row --&gt;
+  &lt;div style=&quot;position: relative; margin: 16pt 0; flex: 1; display: flex; align-items: stretch;&quot;&gt;
+    &lt;!-- Horizontal connection bar behind dots --&gt;
+    &lt;div style=&quot;position: absolute; top: -14pt; left: 60pt; right: 60pt; height: 2pt; background: #cbd5e1; z-index: 0;&quot;&gt;&lt;/div&gt;
+
+    &lt;div style=&quot;display: flex; gap: 12pt; width: 100%; position: relative; z-index: 1;&quot;&gt;
+      
+      &lt;!-- Phase 1 --&gt;
+      &lt;div class=&quot;timeline-card&quot; style=&quot;border-top: 3pt solid #3b82f6;&quot;&gt;
+        &lt;div style=&quot;position: absolute; top: -20pt; left: 50%; transform: translateX(-50%); width: 14pt; height: 14pt; border-radius: 50%; background: #3b82f6; border: 2pt solid #ffffff; box-shadow: 0 0 0 2pt #3b82f6;&quot;&gt;&lt;/div&gt;
+        &lt;span class=&quot;phase-badge&quot; style=&quot;background: #eff6ff; color: #1d4ed8;&quot;&gt;PHASE 01 • 10.01&lt;/span&gt;
+        &lt;h4 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;&quot;&gt;경량 사내 도구 &amp; 단일 HTML&lt;/h4&gt;
+        &lt;p style=&quot;font-size: 8.2pt; color: #64748b; line-height: 1.45; margin-bottom: 8pt; flex: 1;&quot;&gt;
+          설치 없는 단일 파일로 즉시 배포 가능한 현장 업무 도구 구축
+        &lt;/p&gt;
+        &lt;div style=&quot;background: #f8fafc; border-radius: 6pt; padding: 6pt 8pt; font-size: 7.8pt; color: #334155; line-height: 1.4;&quot;&gt;
+          &lt;p&gt;• &lt;b&gt;STOCKLIST:&lt;/b&gt; 비품 재고 관리&lt;/p&gt;
+          &lt;p&gt;• &lt;b&gt;EDU_CHECKLIST:&lt;/b&gt; 의무교육 대시보드&lt;/p&gt;
+          &lt;p style=&quot;color: #3b82f6; font-weight: 600; margin-top: 2pt;&quot;&gt;Stack: HTML5, GAS, Sheets&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Phase 2 --&gt;
+      &lt;div class=&quot;timeline-card&quot; style=&quot;border-top: 3pt solid #10b981;&quot;&gt;
+        &lt;div style=&quot;position: absolute; top: -20pt; left: 50%; transform: translateX(-50%); width: 14pt; height: 14pt; border-radius: 50%; background: #10b981; border: 2pt solid #ffffff; box-shadow: 0 0 0 2pt #10b981;&quot;&gt;&lt;/div&gt;
+        &lt;span class=&quot;phase-badge&quot; style=&quot;background: #ecfdf5; color: #047857;&quot;&gt;PHASE 02 • 10.02-10.07&lt;/span&gt;
+        &lt;h4 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;&quot;&gt;데이터 감사 &amp; AI 감성 분석&lt;/h4&gt;
+        &lt;p style=&quot;font-size: 8.2pt; color: #64748b; line-height: 1.45; margin-bottom: 8pt; flex: 1;&quot;&gt;
+          Next.js 도입 및 규정 검증 룰 엔진, 클라우드 DB 연동 시작
+        &lt;/p&gt;
+        &lt;div style=&quot;background: #f8fafc; border-radius: 6pt; padding: 6pt 8pt; font-size: 7.8pt; color: #334155; line-height: 1.4;&quot;&gt;
+          &lt;p&gt;• &lt;b&gt;경비정산검사기:&lt;/b&gt; CSV 규정 감사&lt;/p&gt;
+          &lt;p&gt;• &lt;b&gt;CUSTOMER_REVIEW:&lt;/b&gt; VOC 분석&lt;/p&gt;
+          &lt;p style=&quot;color: #10b981; font-weight: 600; margin-top: 2pt;&quot;&gt;Stack: Next.js, Supabase, AI&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Phase 3 --&gt;
+      &lt;div class=&quot;timeline-card&quot; style=&quot;border-top: 3pt solid #f59e0b;&quot;&gt;
+        &lt;div style=&quot;position: absolute; top: -20pt; left: 50%; transform: translateX(-50%); width: 14pt; height: 14pt; border-radius: 50%; background: #f59e0b; border: 2pt solid #ffffff; box-shadow: 0 0 0 2pt #f59e0b;&quot;&gt;&lt;/div&gt;
+        &lt;span class=&quot;phase-badge&quot; style=&quot;background: #fffbeb; color: #b45309;&quot;&gt;PHASE 03 • 10.08-10.12&lt;/span&gt;
+        &lt;h4 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;&quot;&gt;실무 밀착형 도메인 자동화&lt;/h4&gt;
+        &lt;p style=&quot;font-size: 8.2pt; color: #64748b; line-height: 1.45; margin-bottom: 8pt; flex: 1;&quot;&gt;
+          아파트 관리사무소 VOC 및 공동구매 등 현업 비즈니스 솔루션
+        &lt;/p&gt;
+        &lt;div style=&quot;background: #f8fafc; border-radius: 6pt; padding: 6pt 8pt; font-size: 7.8pt; color: #334155; line-height: 1.4;&quot;&gt;
+          &lt;p&gt;• &lt;b&gt;민원ON:&lt;/b&gt; AI 민원 응대 빌더&lt;/p&gt;
+          &lt;p&gt;• &lt;b&gt;AptGonggu:&lt;/b&gt; 공구 주문 매니저&lt;/p&gt;
+          &lt;p&gt;• &lt;b&gt;지점 매출 보드:&lt;/b&gt; 500+ 스텝 완성&lt;/p&gt;
+          &lt;p style=&quot;color: #f59e0b; font-weight: 600; margin-top: 2pt;&quot;&gt;Stack: Vite/Next, Bun, Tailwind&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Phase 4 --&gt;
+      &lt;div class=&quot;timeline-card&quot; style=&quot;border-top: 3pt solid #8b5cf6;&quot;&gt;
+        &lt;div style=&quot;position: absolute; top: -20pt; left: 50%; transform: translateX(-50%); width: 14pt; height: 14pt; border-radius: 50%; background: #8b5cf6; border: 2pt solid #ffffff; box-shadow: 0 0 0 2pt #8b5cf6;&quot;&gt;&lt;/div&gt;
+        &lt;span class=&quot;phase-badge&quot; style=&quot;background: #f5f3ff; color: #6d28d9;&quot;&gt;PHASE 04 • 10.13-10.16&lt;/span&gt;
+        &lt;h4 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;&quot;&gt;엔터프라이즈 SaaS &amp; 스킬&lt;/h4&gt;
+        &lt;p style=&quot;font-size: 8.2pt; color: #64748b; line-height: 1.45; margin-bottom: 8pt; flex: 1;&quot;&gt;
+          Supabase 결재 시스템 구축 및 안티그래비티 글로벌 스킬 통합
+        &lt;/p&gt;
+        &lt;div style=&quot;background: #f8fafc; border-radius: 6pt; padding: 6pt 8pt; font-size: 7.8pt; color: #334155; line-height: 1.4;&quot;&gt;
+          &lt;p&gt;• &lt;b&gt;PROJECT_42:&lt;/b&gt; 휴가 결재 시스템&lt;/p&gt;
+          &lt;p&gt;• &lt;b&gt;Global Skills:&lt;/b&gt; 커스텀 스킬 설치&lt;/p&gt;
+          &lt;p&gt;• &lt;b&gt;Resume Flow:&lt;/b&gt; 세션 연속성 확보&lt;/p&gt;
+          &lt;p style=&quot;color: #8b5cf6; font-weight: 600; margin-top: 2pt;&quot;&gt;Stack: Supabase BaaS, AGY Skills&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Footer --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; padding-top: 8pt; border-top: 1px solid #e2e8f0; font-size: 8pt; color: #94a3b8;&quot;&gt;
+    &lt;span&gt;CONTINUOUS AGENT PAIR-PROGRAMMING LIFECYCLE&lt;/span&gt;
+    &lt;span&gt;4 PHASES OVER 17 SESSIONS&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-same-origin allow-scripts"></iframe>
+        <iframe class="slide-frame" data-slide="4" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css&quot;&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: &#39;Pretendard&#39;, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #2563eb;
+    }
+    .project-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10pt;
+      padding: 16pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .badge-pill {
+      font-size: 7.5pt;
+      font-weight: 600;
+      padding: 2pt 6pt;
+      border-radius: 3pt;
+      background: #e2e8f0;
+      color: #334155;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- Header --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #f1f5f9;&quot;&gt;
+    &lt;div&gt;
+      &lt;div style=&quot;display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;&quot;&gt;
+        &lt;span class=&quot;tag&quot;&gt;PHASE 01 • 2026.10.01&lt;/span&gt;
+        &lt;span style=&quot;font-size: 9pt; color: #64748b; font-weight: 500;&quot;&gt;신속한 현장 업무 자동화&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;h2 style=&quot;font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;&quot;&gt;
+        경량 사내 도구 &amp; 단일 HTML 아키텍처
+      &lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;text-align: right;&quot;&gt;
+      &lt;p style=&quot;font-size: 8.5pt; color: #94a3b8; font-family: monospace;&quot;&gt;Zero Server Cost&lt;/p&gt;
+      &lt;p style=&quot;font-size: 11pt; font-weight: 700; color: #2563eb;&quot;&gt;SLIDE 04 / 09&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Content 2-Column Split --&gt;
+  &lt;div style=&quot;display: grid; grid-template-columns: 1fr 1fr; gap: 16pt; margin: 12pt 0; flex: 1;&quot;&gt;
+    
+    &lt;!-- Left Project: STOCKLIST --&gt;
+    &lt;div class=&quot;project-card&quot; style=&quot;border-top: 3pt solid #3b82f6;&quot;&gt;
+      &lt;div&gt;
+        &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-bottom: 8pt;&quot;&gt;
+          &lt;h3 style=&quot;font-size: 13pt; font-weight: 700; color: #0f172a;&quot;&gt;STOCKLIST (비품 재고 관리)&lt;/h3&gt;
+          &lt;span class=&quot;badge-pill&quot; style=&quot;background: #dbeafe; color: #1e40af;&quot;&gt;GAS + Single HTML&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6pt; padding: 8pt 10pt; margin-bottom: 8pt;&quot;&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #ef4444; font-weight: 600; margin-bottom: 2pt;&quot;&gt;🚨 문제 정의 (Problem)&lt;/p&gt;
+          &lt;p style=&quot;font-size: 8.2pt; color: #475569; line-height: 1.45;&quot;&gt;
+            40인 인테리어 회사에서 엑셀 대장과 실제 창고 재고 불일치. 직원이 비품 반출 시 기록하지 않아 빈번한 결품 발생.
+          &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6pt; padding: 8pt 10pt;&quot;&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #10b981; font-weight: 600; margin-bottom: 2pt;&quot;&gt;💡 해결 방안 (Solution)&lt;/p&gt;
+          &lt;p style=&quot;font-size: 8.2pt; color: #475569; line-height: 1.45;&quot;&gt;
+            별도 앱 설치 없이 브라우저로 여는 단일 &lt;code&gt;index.html&lt;/code&gt; 구축. Google Apps Script(&lt;code&gt;Code.gs&lt;/code&gt;)와 스프레드시트를 백엔드로 연동하여 실시간 입출고 동기화.
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;&quot;&gt;
+        &lt;span&gt;Session: &lt;code&gt;4118a1e8&lt;/code&gt;&lt;/span&gt;
+        &lt;span style=&quot;font-weight: 600; color: #2563eb;&quot;&gt;배포: 사내 즉시 배포 완료&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Right Project: EDU_CHECKLIST --&gt;
+    &lt;div class=&quot;project-card&quot; style=&quot;border-top: 3pt solid #10b981;&quot;&gt;
+      &lt;div&gt;
+        &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-bottom: 8pt;&quot;&gt;
+          &lt;h3 style=&quot;font-size: 13pt; font-weight: 700; color: #0f172a;&quot;&gt;EDU_CHECKLIST (의무교육 대시보드)&lt;/h3&gt;
+          &lt;span class=&quot;badge-pill&quot; style=&quot;background: #d1fae5; color: #065f46;&quot;&gt;CSV Client Engine&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6pt; padding: 8pt 10pt; margin-bottom: 8pt;&quot;&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #ef4444; font-weight: 600; margin-bottom: 2pt;&quot;&gt;🚨 문제 정의 (Problem)&lt;/p&gt;
+          &lt;p style=&quot;font-size: 8.2pt; color: #475569; line-height: 1.45;&quot;&gt;
+            사내 법정 의무교육 이수 명단(수백 행 CSV)을 일일이 수작업 필터링하여 미이수자 독려 메일을 발송하는 비효율 발생.
+          &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6pt; padding: 8pt 10pt;&quot;&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #10b981; font-weight: 600; margin-bottom: 2pt;&quot;&gt;💡 해결 방안 (Solution)&lt;/p&gt;
+          &lt;p style=&quot;font-size: 8.2pt; color: #475569; line-height: 1.45;&quot;&gt;
+            &lt;code&gt;hangyul_sample.csv&lt;/code&gt; 등 사내 교육 데이터를 브라우저에서 드래그앤드롭으로 즉시 분석. 부서별 이수율 통계 및 미이수자 자동 리스트업 UI 제공.
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;&quot;&gt;
+        &lt;span&gt;Session: &lt;code&gt;d708be15&lt;/code&gt;&lt;/span&gt;
+        &lt;span style=&quot;font-weight: 600; color: #10b981;&quot;&gt;성과: 교육 관리 공수 80% 절감&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;!-- Key Takeaway Banner --&gt;
+  &lt;div style=&quot;background: #f1f5f9; border-radius: 6pt; padding: 8pt 12pt; display: flex; align-items: center; justify-content: space-between;&quot;&gt;
+    &lt;p style=&quot;font-size: 8.5pt; color: #334155; font-weight: 500;&quot;&gt;
+      🎯 &lt;b&gt;Phase 1 시사점:&lt;/b&gt; 복잡한 인프라 셋업 없이, &lt;b&gt;단일 파일 기반 빠른 프로토타이핑&lt;/b&gt;으로 현업 실무자의 당면 과제를 24시간 내 해결.
+    &lt;/p&gt;
+    &lt;span style=&quot;font-size: 8pt; color: #2563eb; font-weight: 600;&quot;&gt;Fast Feedback Loop&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-same-origin allow-scripts"></iframe>
+        <iframe class="slide-frame" data-slide="5" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css&quot;&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: &#39;Pretendard&#39;, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #059669;
+    }
+    .box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10pt;
+      padding: 14pt 16pt;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- Header --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #f1f5f9;&quot;&gt;
+    &lt;div&gt;
+      &lt;div style=&quot;display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;&quot;&gt;
+        &lt;span class=&quot;tag&quot;&gt;PHASE 02 • 2026.10.02 - 10.07&lt;/span&gt;
+        &lt;span style=&quot;font-size: 9pt; color: #64748b; font-weight: 500;&quot;&gt;Next.js &amp; BaaS 아키텍처 도입&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;h2 style=&quot;font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;&quot;&gt;
+        비즈니스 룰 엔진 &amp; AI 감성 분석 파이프라인
+      &lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;text-align: right;&quot;&gt;
+      &lt;p style=&quot;font-size: 8.5pt; color: #94a3b8; font-family: monospace;&quot;&gt;Deep Pairing (300~400+ Steps)&lt;/p&gt;
+      &lt;p style=&quot;font-size: 11pt; font-weight: 700; color: #059669;&quot;&gt;SLIDE 05 / 09&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Content 2-Column Split --&gt;
+  &lt;div style=&quot;display: grid; grid-template-columns: 1fr 1fr; gap: 16pt; margin: 12pt 0; flex: 1;&quot;&gt;
+    
+    &lt;!-- Left Project: 경비정산검사기 --&gt;
+    &lt;div class=&quot;box&quot; style=&quot;border-top: 3pt solid #059669;&quot;&gt;
+      &lt;div&gt;
+        &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-bottom: 6pt;&quot;&gt;
+          &lt;h3 style=&quot;font-size: 12.5pt; font-weight: 700; color: #0f172a;&quot;&gt;경비정산검사기 (Expense Auditor)&lt;/h3&gt;
+          &lt;span style=&quot;font-size: 7.5pt; padding: 2pt 6pt; background: #d1fae5; color: #065f46; font-weight: 600; border-radius: 4pt;&quot;&gt;Next.js + 룰 엔진&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 8.2pt; color: #64748b; line-height: 1.4; margin-bottom: 8pt;&quot;&gt;
+          월말 수백 건의 법인카드 영수증 수기 대조 비용 및 중복 청구 누락으로 인한 2중 지급 사고 방지.
+        &lt;/p&gt;
+
+        &lt;!-- Feature Points --&gt;
+        &lt;div style=&quot;display: flex; flex-direction: column; gap: 5pt;&quot;&gt;
+          &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;&quot;&gt;
+            &lt;p style=&quot;font-size: 8pt; font-weight: 700; color: #0f172a;&quot;&gt;✓ 다차원 중복 검사 알고리즘&lt;/p&gt;
+            &lt;p style=&quot;font-size: 7.8pt; color: #64748b;&quot;&gt;동일 일시, 금액, 가맹점 기준 중복 청구 건 실시간 필터링&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;&quot;&gt;
+            &lt;p style=&quot;font-size: 8pt; font-weight: 700; color: #0f172a;&quot;&gt;✓ 정책 위반(심야/주말/한도초과) 자동 탐지&lt;/p&gt;
+            &lt;p style=&quot;font-size: 7.8pt; color: #64748b;&quot;&gt;사내 경비 규정 위반 건 뱃지 표시 및 즉시 리포트 출력&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;&quot;&gt;
+        &lt;span&gt;Session: &lt;code&gt;3063817d&lt;/code&gt; (345 Steps)&lt;/span&gt;
+        &lt;span style=&quot;font-weight: 600; color: #059669;&quot;&gt;9월_경비내역.csv 실증 검증&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Right Project: CUSTOMER_REVIEW_ANALYZER --&gt;
+    &lt;div class=&quot;box&quot; style=&quot;border-top: 3pt solid #2563eb;&quot;&gt;
+      &lt;div&gt;
+        &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-bottom: 6pt;&quot;&gt;
+          &lt;h3 style=&quot;font-size: 12.5pt; font-weight: 700; color: #0f172a;&quot;&gt;고객 리뷰 감성 분석기 (VOC Analyzer)&lt;/h3&gt;
+          &lt;span style=&quot;font-size: 7.5pt; padding: 2pt 6pt; background: #dbeafe; color: #1e40af; font-weight: 600; border-radius: 4pt;&quot;&gt;Next.js + Supabase DB&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 8.2pt; color: #64748b; line-height: 1.4; margin-bottom: 8pt;&quot;&gt;
+          다채널 고객 리뷰 데이터를 한곳에 모으고, 긍정·부정 감성 점수화 및 주요 불만 키워드를 자동 군집화.
+        &lt;/p&gt;
+
+        &lt;!-- Feature Points --&gt;
+        &lt;div style=&quot;display: flex; flex-direction: column; gap: 5pt;&quot;&gt;
+          &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;&quot;&gt;
+            &lt;p style=&quot;font-size: 8pt; font-weight: 700; color: #0f172a;&quot;&gt;✓ Supabase Cloud PostgreSQL 연동&lt;/p&gt;
+            &lt;p style=&quot;font-size: 7.8pt; color: #64748b;&quot;&gt;실시간 데이터 저장소 연동 및 대용량 리뷰 테이블 설계&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;&quot;&gt;
+            &lt;p style=&quot;font-size: 8pt; font-weight: 700; color: #0f172a;&quot;&gt;✓ 감성 지수 스코어링 &amp; 트렌드 시각화&lt;/p&gt;
+            &lt;p style=&quot;font-size: 7.8pt; color: #64748b;&quot;&gt;리뷰 텍스트로부터 불만 요인 추출 및 주차별 만족도 변화 추적&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;&quot;&gt;
+        &lt;span&gt;Session: &lt;code&gt;8a6e5a76&lt;/code&gt; (433 Steps)&lt;/span&gt;
+        &lt;span style=&quot;font-weight: 600; color: #2563eb;&quot;&gt;MCP Supabase 도구 본격 활용&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;!-- Key Takeaway Banner --&gt;
+  &lt;div style=&quot;background: #f1f5f9; border-radius: 6pt; padding: 8pt 12pt; display: flex; align-items: center; justify-content: space-between;&quot;&gt;
+    &lt;p style=&quot;font-size: 8.5pt; color: #334155; font-weight: 500;&quot;&gt;
+      🎯 &lt;b&gt;Phase 2 시사점:&lt;/b&gt; 프론트엔드 단독 처리를 넘어, &lt;b&gt;정밀한 비즈니스 룰 엔진&lt;/b&gt;과 &lt;b&gt;Supabase Cloud DB&lt;/b&gt;를 결합한 프로덕션 아키텍처 진입.
+    &lt;/p&gt;
+    &lt;span style=&quot;font-size: 8pt; color: #059669; font-weight: 600;&quot;&gt;Full-Stack &amp; BaaS Jump&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-same-origin allow-scripts"></iframe>
+        <iframe class="slide-frame" data-slide="6" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css&quot;&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: &#39;Pretendard&#39;, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #b45309;
+    }
+    .card3 {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 9pt;
+      padding: 12pt 14pt;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- Header --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #f1f5f9;&quot;&gt;
+    &lt;div&gt;
+      &lt;div style=&quot;display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;&quot;&gt;
+        &lt;span class=&quot;tag&quot;&gt;PHASE 03 • 2026.10.08 - 10.12&lt;/span&gt;
+        &lt;span style=&quot;font-size: 9pt; color: #64748b; font-weight: 500;&quot;&gt;도메인 특화 비즈니스 솔루션 집중 구축&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;h2 style=&quot;font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;&quot;&gt;
+        아파트 주거·유통·매출 관리 전문 솔루션 스위트
+      &lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;text-align: right;&quot;&gt;
+      &lt;p style=&quot;font-size: 8.5pt; color: #94a3b8; font-family: monospace;&quot;&gt;Over 800+ Total Steps&lt;/p&gt;
+      &lt;p style=&quot;font-size: 11pt; font-weight: 700; color: #d97706;&quot;&gt;SLIDE 06 / 09&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Content 3-Column Grid --&gt;
+  &lt;div style=&quot;display: grid; grid-template-columns: repeat(3, 1fr); gap: 12pt; margin: 12pt 0; flex: 1;&quot;&gt;
+    
+    &lt;!-- 1. 스마트 관리사무소 민원ON --&gt;
+    &lt;div class=&quot;card3&quot; style=&quot;border-top: 3pt solid #f59e0b;&quot;&gt;
+      &lt;div&gt;
+        &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-bottom: 6pt;&quot;&gt;
+          &lt;h3 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a;&quot;&gt;민원ON (VOC 빌더)&lt;/h3&gt;
+          &lt;span style=&quot;font-size: 7pt; padding: 2pt 5pt; background: #fef3c7; color: #92400e; font-weight: 600; border-radius: 3pt;&quot;&gt;Live Deployed&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 7.8pt; color: #ef4444; font-weight: 600; margin-bottom: 2pt;&quot;&gt;🚨 감정 노동 &amp; 응대 지연&lt;/p&gt;
+        &lt;p style=&quot;font-size: 7.8pt; color: #475569; line-height: 1.4; margin-bottom: 6pt;&quot;&gt;
+          층간소음, 누수, 주차 등 반복 악성 민원에 대한 관리소 직원의 감정 소모 극심.
+        &lt;/p&gt;
+        &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt; font-size: 7.6pt; color: #334155; line-height: 1.35;&quot;&gt;
+          &lt;p&gt;&lt;b&gt;✨ 핵심 솔루션:&lt;/b&gt;&lt;/p&gt;
+          &lt;p&gt;• 민원 유형별 표준 대응 템플릿&lt;/p&gt;
+          &lt;p&gt;• 상황별 정중하고 법적 리스크 없는 AI 자동 답변 가이드 생성&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top: 6pt; padding-top: 4pt; border-top: 1px dashed #cbd5e1; font-size: 7.2pt; color: #64748b; display: flex; justify-content: space-between;&quot;&gt;
+        &lt;span&gt;Session: &lt;code&gt;b322ebdc&lt;/code&gt; (135)&lt;/span&gt;
+        &lt;span style=&quot;color: #d97706; font-weight: 600;&quot;&gt;Bun + Tailwind&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 2. AptGonggu Manager --&gt;
+    &lt;div class=&quot;card3&quot; style=&quot;border-top: 3pt solid #10b981;&quot;&gt;
+      &lt;div&gt;
+        &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-bottom: 6pt;&quot;&gt;
+          &lt;h3 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a;&quot;&gt;AptGonggu 매니저&lt;/h3&gt;
+          &lt;span style=&quot;font-size: 7pt; padding: 2pt 5pt; background: #d1fae5; color: #065f46; font-weight: 600; border-radius: 3pt;&quot;&gt;Full Flow&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 7.8pt; color: #ef4444; font-weight: 600; margin-bottom: 2pt;&quot;&gt;🚨 비정형 주문 누락 &amp; 증빙 분실&lt;/p&gt;
+        &lt;p style=&quot;font-size: 7.8pt; color: #475569; line-height: 1.4; margin-bottom: 6pt;&quot;&gt;
+          전화/문자로 들어오는 불규칙 공동구매 주문 수기 메모 시 누락 및 입금 대조 혼선.
+        &lt;/p&gt;
+        &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt; font-size: 7.6pt; color: #334155; line-height: 1.35;&quot;&gt;
+          &lt;p&gt;&lt;b&gt;✨ 핵심 솔루션:&lt;/b&gt;&lt;/p&gt;
+          &lt;p&gt;• 동/호수별 주문 통합 관리&lt;/p&gt;
+          &lt;p&gt;• 문자 캡처 증빙 이미지 즉시 보관&lt;/p&gt;
+          &lt;p&gt;• 실시간 입금 대조 &amp; 수령 체크&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top: 6pt; padding-top: 4pt; border-top: 1px dashed #cbd5e1; font-size: 7.2pt; color: #64748b; display: flex; justify-content: space-between;&quot;&gt;
+        &lt;span&gt;Session: &lt;code&gt;8c4827f4&lt;/code&gt; (134)&lt;/span&gt;
+        &lt;span style=&quot;color: #059669; font-weight: 600;&quot;&gt;PRD 기반 개발&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 3. Branch Sales Board --&gt;
+    &lt;div class=&quot;card3&quot; style=&quot;border-top: 3pt solid #3b82f6;&quot;&gt;
+      &lt;div&gt;
+        &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-bottom: 6pt;&quot;&gt;
+          &lt;h3 style=&quot;font-size: 11pt; font-weight: 700; color: #0f172a;&quot;&gt;지점 매출 관리 보드&lt;/h3&gt;
+          &lt;span style=&quot;font-size: 7pt; padding: 2pt 5pt; background: #dbeafe; color: #1e40af; font-weight: 600; border-radius: 3pt;&quot;&gt;538 Steps&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 7.8pt; color: #ef4444; font-weight: 600; margin-bottom: 2pt;&quot;&gt;🚨 지점별 데이터 파편화&lt;/p&gt;
+        &lt;p style=&quot;font-size: 7.8pt; color: #475569; line-height: 1.4; margin-bottom: 6pt;&quot;&gt;
+          전국 지점의 일일/월간 매출 통계 집계 지연 및 실적 비교 분석 불가 문제.
+        &lt;/p&gt;
+        &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt; font-size: 7.6pt; color: #334155; line-height: 1.35;&quot;&gt;
+          &lt;p&gt;&lt;b&gt;✨ 핵심 솔루션:&lt;/b&gt;&lt;/p&gt;
+          &lt;p&gt;• Supabase 프로젝트 직접 생성/연동&lt;/p&gt;
+          &lt;p&gt;• 지점별 목표 대비 달성률 시각화&lt;/p&gt;
+          &lt;p&gt;• 차트 및 다차원 필터링 대시보드&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top: 6pt; padding-top: 4pt; border-top: 1px dashed #cbd5e1; font-size: 7.2pt; color: #64748b; display: flex; justify-content: space-between;&quot;&gt;
+        &lt;span&gt;Session: &lt;code&gt;b951dad8&lt;/code&gt; (538)&lt;/span&gt;
+        &lt;span style=&quot;color: #2563eb; font-weight: 600;&quot;&gt;최대 스텝 세션&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;!-- Key Takeaway Banner --&gt;
+  &lt;div style=&quot;background: #f1f5f9; border-radius: 6pt; padding: 8pt 12pt; display: flex; align-items: center; justify-content: space-between;&quot;&gt;
+    &lt;p style=&quot;font-size: 8.5pt; color: #334155; font-weight: 500;&quot;&gt;
+      🎯 &lt;b&gt;Phase 3 시사점:&lt;/b&gt; 아파트 관리 현장의 &lt;b&gt;실제 사용자 페인포인트&lt;/b&gt;를 타겟하여, 복잡한 비즈니스 로직을 에이전트와 500+ 스텝에 걸쳐 완성.
+    &lt;/p&gt;
+    &lt;span style=&quot;font-size: 8pt; color: #d97706; font-weight: 600;&quot;&gt;Real Domain Value&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-same-origin allow-scripts"></iframe>
+        <iframe class="slide-frame" data-slide="7" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css&quot;&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: &#39;Pretendard&#39;, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #f5f3ff;
+      border: 1px solid #ddd6fe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #7c3aed;
+    }
+    .box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10pt;
+      padding: 14pt 16pt;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- Header --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #f1f5f9;&quot;&gt;
+    &lt;div&gt;
+      &lt;div style=&quot;display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;&quot;&gt;
+        &lt;span class=&quot;tag&quot;&gt;PHASE 04 • 2026.10.13 - 10.16 (CURRENT)&lt;/span&gt;
+        &lt;span style=&quot;font-size: 9pt; color: #64748b; font-weight: 500;&quot;&gt;엔터프라이즈 SaaS &amp; 에이전트 확장&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;h2 style=&quot;font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;&quot;&gt;
+        PROJECT_42 휴가 결재 SaaS &amp; 안티그래비티 스킬 내재화
+      &lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;text-align: right;&quot;&gt;
+      &lt;p style=&quot;font-size: 8.5pt; color: #94a3b8; font-family: monospace;&quot;&gt;Session Resume Workflow&lt;/p&gt;
+      &lt;p style=&quot;font-size: 11pt; font-weight: 700; color: #7c3aed;&quot;&gt;SLIDE 07 / 09&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Content 2-Column Split --&gt;
+  &lt;div style=&quot;display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16pt; margin: 12pt 0; flex: 1;&quot;&gt;
+    
+    &lt;!-- Left Project: PROJECT_42 --&gt;
+    &lt;div class=&quot;box&quot; style=&quot;border-top: 3pt solid #7c3aed;&quot;&gt;
+      &lt;div&gt;
+        &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-bottom: 6pt;&quot;&gt;
+          &lt;h3 style=&quot;font-size: 12.5pt; font-weight: 700; color: #0f172a;&quot;&gt;PROJECT_42 (휴가/근태 결재 시스템)&lt;/h3&gt;
+          &lt;span style=&quot;font-size: 7.5pt; padding: 2pt 6pt; background: #ede9fe; color: #5b21b6; font-weight: 600; border-radius: 4pt;&quot;&gt;Next.js + Supabase SaaS&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 8.2pt; color: #64748b; line-height: 1.4; margin-bottom: 8pt;&quot;&gt;
+          조직도 기반 전사 직원 휴가 신청, 상신, 다단계 승인 결재선 및 잔여 연차 차감 로직 구현.
+        &lt;/p&gt;
+
+        &lt;!-- Feature Points --&gt;
+        &lt;div style=&quot;display: flex; flex-direction: column; gap: 5pt;&quot;&gt;
+          &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;&quot;&gt;
+            &lt;p style=&quot;font-size: 8pt; font-weight: 700; color: #0f172a;&quot;&gt;✓ Supabase 실시간 결재 트랜잭션&lt;/p&gt;
+            &lt;p style=&quot;font-size: 7.8pt; color: #64748b;&quot;&gt;휴가 승인 시 사용자 연차 잔여일수 자동 원자적 차감 및 히스토리 기록&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;&quot;&gt;
+            &lt;p style=&quot;font-size: 8pt; font-weight: 700; color: #0f172a;&quot;&gt;✓ 대규모 세션 연속성 (Resume Session)&lt;/p&gt;
+            &lt;p style=&quot;font-size: 7.8pt; color: #64748b;&quot;&gt;Session &lt;code&gt;b08b6483&lt;/code&gt; (269 steps) → &lt;code&gt;ac16389f&lt;/code&gt; (327 steps) 매끄러운 컨텍스트 승계&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;&quot;&gt;
+        &lt;span&gt;누적 596+ Steps 인터랙션&lt;/span&gt;
+        &lt;span style=&quot;font-weight: 600; color: #7c3aed;&quot;&gt;엔터프라이즈 프로덕션 수준&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Right: Anti-Gravity Custom Skills --&gt;
+    &lt;div class=&quot;box&quot; style=&quot;border-top: 3pt solid #2563eb;&quot;&gt;
+      &lt;div&gt;
+        &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-bottom: 6pt;&quot;&gt;
+          &lt;h3 style=&quot;font-size: 12.5pt; font-weight: 700; color: #0f172a;&quot;&gt;안티그래비티 글로벌 스킬 도입&lt;/h3&gt;
+          &lt;span style=&quot;font-size: 7.5pt; padding: 2pt 6pt; background: #dbeafe; color: #1e40af; font-weight: 600; border-radius: 4pt;&quot;&gt;Skill System&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;font-size: 8.2pt; color: #64748b; line-height: 1.4; margin-bottom: 8pt;&quot;&gt;
+          에이전트에게 사내 코딩 컨벤션 및 특화 도구(MCP, 브라우징, 생성 UI) 권한 부여.
+        &lt;/p&gt;
+
+        &lt;!-- Feature Points --&gt;
+        &lt;div style=&quot;display: flex; flex-direction: column; gap: 5pt;&quot;&gt;
+          &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;&quot;&gt;
+            &lt;p style=&quot;font-size: 8pt; font-weight: 700; color: #0f172a;&quot;&gt;✓ Global Skills Installation&lt;/p&gt;
+            &lt;p style=&quot;font-size: 7.8pt; color: #64748b;&quot;&gt;Session &lt;code&gt;efe3de19&lt;/code&gt;를 통해 워크스페이스 전역 표준 스킬셋 배포&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 5pt; padding: 6pt 8pt;&quot;&gt;
+            &lt;p style=&quot;font-size: 8pt; font-weight: 700; color: #0f172a;&quot;&gt;✓ slides-grab 공식 파이프라인 연동&lt;/p&gt;
+            &lt;p style=&quot;font-size: 7.8pt; color: #64748b;&quot;&gt;현재 세션(&lt;code&gt;3b513b1a&lt;/code&gt;)에서 HTML 슬라이드 엔진 직접 구동&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;margin-top: 8pt; padding-top: 6pt; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; font-size: 7.8pt; color: #64748b;&quot;&gt;
+        &lt;span&gt;Anti-Gravity Extensibility&lt;/span&gt;
+        &lt;span style=&quot;font-weight: 600; color: #2563eb;&quot;&gt;AI 에이전트 자율성 극대화&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;!-- Key Takeaway Banner --&gt;
+  &lt;div style=&quot;background: #f1f5f9; border-radius: 6pt; padding: 8pt 12pt; display: flex; align-items: center; justify-content: space-between;&quot;&gt;
+    &lt;p style=&quot;font-size: 8.5pt; color: #334155; font-weight: 500;&quot;&gt;
+      🎯 &lt;b&gt;Phase 4 시사점:&lt;/b&gt; 이제 안티그래비티는 단순한 보조 코더가 아닌, &lt;b&gt;엔터프라이즈 SaaS 전체 라이프사이클과 스킬셋을 주도하는 코파일럿&lt;/b&gt;으로 안착.
+    &lt;/p&gt;
+    &lt;span style=&quot;font-size: 8pt; color: #7c3aed; font-weight: 600;&quot;&gt;Enterprise Copilot&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-same-origin allow-scripts"></iframe>
+        <iframe class="slide-frame" data-slide="8" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css&quot;&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: &#39;Pretendard&#39;, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 34pt 44pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3pt 8pt;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 4pt;
+      font-size: 8pt;
+      font-weight: 600;
+      color: #2563eb;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+    }
+    th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      text-align: left;
+      padding: 6pt 10pt;
+      border-bottom: 2pt solid #cbd5e1;
+    }
+    td {
+      padding: 6pt 10pt;
+      border-bottom: 1px solid #e2e8f0;
+      color: #475569;
+    }
+    .step-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6pt;
+      padding: 8pt 10pt;
+      flex: 1;
+      text-align: center;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- Header --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10pt; border-bottom: 1px solid #f1f5f9;&quot;&gt;
+    &lt;div&gt;
+      &lt;div style=&quot;display: flex; align-items: center; gap: 8pt; margin-bottom: 4pt;&quot;&gt;
+        &lt;span class=&quot;tag&quot;&gt;TECH &amp; METHODOLOGY&lt;/span&gt;
+        &lt;span style=&quot;font-size: 9pt; color: #64748b; font-weight: 500;&quot;&gt;기술 스택 진화 및 생산성 분석&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;h2 style=&quot;font-size: 20pt; font-weight: 700; color: #0f172a; letter-spacing: -0.02em;&quot;&gt;
+        아키텍처 확장 패턴 &amp; 에이전트 협업 사이클
+      &lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;text-align: right;&quot;&gt;
+      &lt;p style=&quot;font-size: 8.5pt; color: #94a3b8; font-family: monospace;&quot;&gt;Architecture Evolution&lt;/p&gt;
+      &lt;p style=&quot;font-size: 11pt; font-weight: 700; color: #2563eb;&quot;&gt;SLIDE 08 / 09&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Content --&gt;
+  &lt;div style=&quot;margin: 10pt 0; flex: 1; display: flex; flex-direction: column; justify-content: space-between;&quot;&gt;
+    
+    &lt;!-- Table: Architecture Comparison --&gt;
+    &lt;div style=&quot;background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8pt; overflow: hidden;&quot;&gt;
+      &lt;table&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th style=&quot;width: 15%;&quot;&gt;단계 (Stage)&lt;/th&gt;
+            &lt;th style=&quot;width: 25%;&quot;&gt;대표 프로젝트&lt;/th&gt;
+            &lt;th style=&quot;width: 35%;&quot;&gt;기술 스택 (Tech Stack)&lt;/th&gt;
+            &lt;th style=&quot;width: 25%;&quot;&gt;아키텍처 가치&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;
+            &lt;td style=&quot;font-weight: 700; color: #3b82f6;&quot;&gt;Stage 1 (초기)&lt;/td&gt;
+            &lt;td&gt;STOCKLIST, EDU_CHECKLIST&lt;/td&gt;
+            &lt;td&gt;Single HTML5, Google Apps Script, CSV&lt;/td&gt;
+            &lt;td&gt;설치 없는 즉각 배포, 제로 인프라 비용&lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;tr&gt;
+            &lt;td style=&quot;font-weight: 700; color: #10b981;&quot;&gt;Stage 2 (중기)&lt;/td&gt;
+            &lt;td&gt;경비정산검사기, 리뷰 분석기&lt;/td&gt;
+            &lt;td&gt;Next.js, Tailwind CSS, Rule Engine, CSV&lt;/td&gt;
+            &lt;td&gt;복잡한 정책 감사 알고리즘, 정적 타입 안정성&lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;tr&gt;
+            &lt;td style=&quot;font-weight: 700; color: #f59e0b;&quot;&gt;Stage 3 (도메인)&lt;/td&gt;
+            &lt;td&gt;스마트 관리소 민원ON, AptGonggu&lt;/td&gt;
+            &lt;td&gt;Vite, Bun, Tailwind, Local Storage/BaaS&lt;/td&gt;
+            &lt;td&gt;도메인 특화 VOC 감정노동 경감, 주문 자동화&lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;tr&gt;
+            &lt;td style=&quot;font-weight: 700; color: #8b5cf6;&quot;&gt;Stage 4 (엔터프라이즈)&lt;/td&gt;
+            &lt;td&gt;PROJECT_42, 지점 매출 보드&lt;/td&gt;
+            &lt;td&gt;Supabase Cloud, PostgreSQL, AGY Skills&lt;/td&gt;
+            &lt;td&gt;클라우드 DB 트랜잭션, 글로벌 스킬 내재화&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Agent Workflow Flowchart --&gt;
+    &lt;div&gt;
+      &lt;p style=&quot;font-size: 8.5pt; font-weight: 700; color: #0f172a; margin-bottom: 6pt;&quot;&gt;
+        🔄 확립된 표준 안티그래비티 페어 프로그래밍 워크플로우
+      &lt;/p&gt;
+      &lt;div style=&quot;display: flex; gap: 8pt; align-items: center;&quot;&gt;
+        &lt;div class=&quot;step-box&quot; style=&quot;border-top: 2pt solid #3b82f6;&quot;&gt;
+          &lt;p style=&quot;font-size: 7.5pt; color: #3b82f6; font-weight: 700;&quot;&gt;STEP 01&lt;/p&gt;
+          &lt;p style=&quot;font-size: 8.5pt; font-weight: 700; color: #0f172a;&quot;&gt;PRD 작성 및 문제 정의&lt;/p&gt;
+          &lt;p style=&quot;font-size: 7.2pt; color: #64748b; margin-top: 2pt;&quot;&gt;현업 페인포인트 기반 요구사항 명세화&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;span style=&quot;color: #94a3b8; font-size: 11pt;&quot;&gt;→&lt;/span&gt;
+        &lt;div class=&quot;step-box&quot; style=&quot;border-top: 2pt solid #10b981;&quot;&gt;
+          &lt;p style=&quot;font-size: 7.5pt; color: #10b981; font-weight: 700;&quot;&gt;STEP 02&lt;/p&gt;
+          &lt;p style=&quot;font-size: 8.5pt; font-weight: 700; color: #0f172a;&quot;&gt;데이터 모델링 &amp; 스키마&lt;/p&gt;
+          &lt;p style=&quot;font-size: 7.2pt; color: #64748b; margin-top: 2pt;&quot;&gt;Supabase DB 테이블 / CSV 규격 확정&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;span style=&quot;color: #94a3b8; font-size: 11pt;&quot;&gt;→&lt;/span&gt;
+        &lt;div class=&quot;step-box&quot; style=&quot;border-top: 2pt solid #f59e0b;&quot;&gt;
+          &lt;p style=&quot;font-size: 7.5pt; color: #f59e0b; font-weight: 700;&quot;&gt;STEP 03&lt;/p&gt;
+          &lt;p style=&quot;font-size: 8.5pt; font-weight: 700; color: #0f172a;&quot;&gt;컴포넌트 &amp; 비즈니스 로직&lt;/p&gt;
+          &lt;p style=&quot;font-size: 7.2pt; color: #64748b; margin-top: 2pt;&quot;&gt;에이전트 실시간 페어 코딩 &amp; 반응형 UI&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;span style=&quot;color: #94a3b8; font-size: 11pt;&quot;&gt;→&lt;/span&gt;
+        &lt;div class=&quot;step-box&quot; style=&quot;border-top: 2pt solid #8b5cf6;&quot;&gt;
+          &lt;p style=&quot;font-size: 7.5pt; color: #8b5cf6; font-weight: 700;&quot;&gt;STEP 04&lt;/p&gt;
+          &lt;p style=&quot;font-size: 8.5pt; font-weight: 700; color: #0f172a;&quot;&gt;빌드 검증 &amp; 세션 승계&lt;/p&gt;
+          &lt;p style=&quot;font-size: 7.2pt; color: #64748b; margin-top: 2pt;&quot;&gt;테스트 실행, 배포, Resume Session&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;!-- Footer --&gt;
+  &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; padding-top: 6pt; border-top: 1px solid #f1f5f9; font-size: 8pt; color: #94a3b8;&quot;&gt;
+    &lt;span&gt;REPEATABLE AGENTIC SOFTWARE ENGINEERING LIFECYCLE&lt;/span&gt;
+    &lt;span&gt;HIGH VELOCITY &amp; RELIABILITY&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-same-origin allow-scripts"></iframe>
+        <iframe class="slide-frame" data-slide="9" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css&quot;&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 720pt;
+      height: 405pt;
+      font-family: &#39;Pretendard&#39;, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #090d16;
+      color: #f8fafc;
+      padding: 36pt 48pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    body::before {
+      content: &#39;&#39;;
+      position: absolute;
+      bottom: -60pt;
+      right: -60pt;
+      width: 400pt;
+      height: 300pt;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.1) 40%, transparent 70%);
+      filter: blur(50px);
+      z-index: 0;
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6pt;
+      padding: 4pt 10pt;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 999pt;
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: #60a5fa;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class=&quot;content&quot;&gt;
+    &lt;!-- Header --&gt;
+    &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center;&quot;&gt;
+      &lt;div class=&quot;badge&quot;&gt;
+        &lt;span&gt;NEXT HORIZON&lt;/span&gt;
+        &lt;span&gt;•&lt;/span&gt;
+        &lt;span&gt;FUTURE ROADMAP&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;font-size: 10pt; color: #64748b; font-family: monospace;&quot;&gt;SLIDE 09 / 09&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Center Content --&gt;
+    &lt;div&gt;
+      &lt;h2 style=&quot;font-size: 26pt; font-weight: 800; color: #ffffff; letter-spacing: -0.02em; margin-bottom: 8pt; line-height: 1.25;&quot;&gt;
+        경량 프로토타입에서 엔터프라이즈 SaaS로,&lt;br&gt;
+        &lt;span style=&quot;background: linear-gradient(90deg, #60a5fa 0%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;&quot;&gt;
+          안티그래비티와 함께한 2달간의 성공적 도약
+        &lt;/span&gt;
+      &lt;/h2&gt;
+      &lt;p style=&quot;font-size: 10.5pt; color: #94a3b8; line-height: 1.6; max-width: 540pt; margin-bottom: 16pt;&quot;&gt;
+        17개 세션, 2,500+ 스텝의 상호작용을 통해 입증된 안티그래비티의 신속성과 아키텍처 확장성은 향후 사내 업무 시스템 전반의 디지털 전환을 이끄는 핵심 동력이 될 것입니다.
+      &lt;/p&gt;
+
+      &lt;!-- Next Steps Grid --&gt;
+      &lt;div style=&quot;display: grid; grid-template-columns: repeat(3, 1fr); gap: 12pt;&quot;&gt;
+        &lt;div style=&quot;background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8pt; padding: 12pt;&quot;&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #60a5fa; font-weight: 700; margin-bottom: 3pt;&quot;&gt;01. PRODUCTION STABILIZATION&lt;/p&gt;
+          &lt;h4 style=&quot;font-size: 10.5pt; font-weight: 700; color: #f8fafc; margin-bottom: 4pt;&quot;&gt;PROJECT_42 전사 배포&lt;/h4&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #94a3b8; line-height: 1.4;&quot;&gt;실제 임직원 근태/휴가 결재 시스템 적용 및 피드백 기반 안정화&lt;/p&gt;
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8pt; padding: 12pt;&quot;&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #34d399; font-weight: 700; margin-bottom: 3pt;&quot;&gt;02. INTEGRATED PORTAL&lt;/p&gt;
+          &lt;h4 style=&quot;font-size: 10.5pt; font-weight: 700; color: #f8fafc; margin-bottom: 4pt;&quot;&gt;사내 도구 통합 대시보드&lt;/h4&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #94a3b8; line-height: 1.4;&quot;&gt;비품·경비·CS·지점매출 개별 도구의 단일 SSO 포털 연계 구축&lt;/p&gt;
+        &lt;/div&gt;
+
+        &lt;div style=&quot;background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8pt; padding: 12pt;&quot;&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #a78bfa; font-weight: 700; margin-bottom: 3pt;&quot;&gt;03. AGY SKILL EXTENSION&lt;/p&gt;
+          &lt;h4 style=&quot;font-size: 10.5pt; font-weight: 700; color: #f8fafc; margin-bottom: 4pt;&quot;&gt;도메인 맞춤형 스킬 자산화&lt;/h4&gt;
+          &lt;p style=&quot;font-size: 8pt; color: #94a3b8; line-height: 1.4;&quot;&gt;사내 비즈니스 로직 및 감사 규정을 Antigravity 스킬로 공식 등록&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Footer --&gt;
+    &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; padding-top: 10pt; border-top: 1px solid rgba(255, 255, 255, 0.08);&quot;&gt;
+      &lt;p style=&quot;font-size: 9pt; color: #64748b;&quot;&gt;
+        Created with &lt;span style=&quot;color: #60a5fa; font-weight: 600;&quot;&gt;slides-grab&lt;/span&gt; Semantic HTML Engine
+      &lt;/p&gt;
+      &lt;p style=&quot;font-size: 9pt; color: #94a3b8;&quot;&gt;
+        Antigravity Pair-Programming Retrospective • October 2026
+      &lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" sandbox="allow-same-origin allow-scripts"></iframe>
+      </div>
+    </div>
+
+    <!-- Bottom Indicator -->
+    <div class="bottom-dots" id="dots-container">
+      <div class="dot active" data-idx="1" title="Slide 1"></div>
+      <div class="dot" data-idx="2" title="Slide 2"></div>
+      <div class="dot" data-idx="3" title="Slide 3"></div>
+      <div class="dot" data-idx="4" title="Slide 4"></div>
+      <div class="dot" data-idx="5" title="Slide 5"></div>
+      <div class="dot" data-idx="6" title="Slide 6"></div>
+      <div class="dot" data-idx="7" title="Slide 7"></div>
+      <div class="dot" data-idx="8" title="Slide 8"></div>
+      <div class="dot" data-idx="9" title="Slide 9"></div>
+    </div>
+  </div>
+
+  <script>
+    const TOTAL = 9;
+    let current = 1;
+
+    const frames = document.querySelectorAll('.slide-frame');
+    const dots = document.querySelectorAll('.dot');
+    const counter = document.getElementById('counter');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const scaler = document.getElementById('scaler');
+    const viewport = document.getElementById('viewport');
+
+    function goTo(n) {
+      n = Math.max(1, Math.min(TOTAL, n));
+      if (n === current) return;
+      frames[current - 1].classList.remove('active');
+      dots[current - 1].classList.remove('active');
+      current = n;
+      frames[current - 1].classList.add('active');
+      dots[current - 1].classList.add('active');
+      counter.textContent = current + ' / ' + TOTAL;
+      btnPrev.disabled = (current === 1);
+      btnNext.disabled = (current === TOTAL);
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    btnPrev.addEventListener('click', prev);
+    btnNext.addEventListener('click', next);
+    btnPrev.disabled = true;
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.getAttribute('data-idx'), 10);
+        goTo(idx);
+      });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        next();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prev();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goTo(1);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goTo(TOTAL);
+      } else if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        toggleFullscreen();
+      }
+    });
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+    }
+    document.getElementById('btn-fs').addEventListener('click', toggleFullscreen);
+
+    // Auto-rescale to fit viewport
+    function rescale() {
+      const vw = viewport.clientWidth;
+      const vh = viewport.clientHeight;
+      const slideW = 960;
+      const slideH = 540;
+      const scale = Math.min((vw - 32) / slideW, (vh - 32) / slideH);
+      scaler.style.transform = 'scale(' + Math.max(0.2, scale) + ')';
+    }
+
+    window.addEventListener('resize', rescale);
+    document.addEventListener('fullscreenchange', () => setTimeout(rescale, 100));
+    rescale();
+  </script>
+</body>
+</html>
