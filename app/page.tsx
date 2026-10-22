@@ -2110,38 +2110,56 @@ export default function Home() {
                   return (
                     <div
                       key={req.id}
-                      className="rounded-[12px] bg-white border border-[#edebe9] p-4 sm:p-5 shadow-xs hover:border-stone-300 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      className="rounded-[12px] bg-white border border-[#edebe9] p-4 sm:p-5 shadow-xs hover:border-[#00754A]/40 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
                     >
-                      {/* 좌측 정보 클러스터 */}
-                      <div className="flex items-start gap-3.5">
-                        <div className="w-11 h-11 rounded-full bg-[#d4e9e2] text-[#1E3932] font-extrabold flex items-center justify-center text-sm flex-shrink-0 mt-0.5">
+                      {/* 좌측 정보 클러스터 (클릭 시 상세 모달 열림) */}
+                      <div
+                        onClick={() => setSelectedRequest(req)}
+                        className="flex items-start gap-3.5 cursor-pointer flex-1 min-w-0"
+                        title="클릭하여 상세 정보 보기"
+                      >
+                        <div className="w-11 h-11 rounded-full bg-[#d4e9e2] text-[#1E3932] font-extrabold flex items-center justify-center text-sm flex-shrink-0 mt-0.5 shadow-2xs">
                           {initialChar}
                         </div>
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-extrabold text-sm text-[#1E3932]">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            {/* [방안 1] 상태 뱃지 좌측 배치 */}
+                            <span
+                              className={`px-2.5 py-0.5 rounded-full text-xs font-bold inline-flex items-center ${
+                                req.status === '승인'
+                                  ? 'bg-[#d4e9e2] text-[#00754A]'
+                                  : req.status === '반려'
+                                  ? 'bg-rose-100 text-rose-800'
+                                  : 'bg-amber-100 text-amber-900'
+                              }`}
+                            >
+                              {req.status}
+                            </span>
+                            <span className="font-extrabold text-sm text-[#1E3932] group-hover:text-[#00754A] transition">
                               {applicantName}
                             </span>
-                            <span className="text-xs text-stone-400">·</span>
-                            <span className="text-sm font-semibold text-stone-800">
+                            <span className="text-xs text-stone-300">·</span>
+                            <span className="text-sm font-semibold text-stone-800 truncate">
                               {req.reason}
                             </span>
                           </div>
-                          <div className="text-xs text-stone-500 mt-1 flex items-center gap-2 flex-wrap">
-                            <span>{formatDateRangeText(req.start_date, req.end_date)}</span>
+                          <div className="text-xs text-stone-500 flex items-center gap-2 flex-wrap">
+                            <span className="font-medium text-stone-700">
+                              {formatDateRangeText(req.start_date, req.end_date)}
+                            </span>
                             {req.leave_type && (
                               <>
-                                <span>·</span>
+                                <span className="text-stone-300">·</span>
                                 <span className="font-bold text-[#00754A]">{req.leave_type}</span>
                               </>
                             )}
                             {applicantDept && (
                               <>
-                                <span>·</span>
-                                <span>{applicantDept}</span>
+                                <span className="text-stone-300">·</span>
+                                <span className="text-stone-600">{applicantDept}</span>
                               </>
                             )}
-                            <span>·</span>
+                            <span className="text-stone-300">·</span>
                             <span className="font-mono text-[11px] text-stone-400">
                               {req.created_at ? req.created_at.split('T')[0] : ''}
                             </span>
@@ -2156,53 +2174,49 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* 우측 상태 & 액션 클러스터 */}
-                      <div className="flex items-center gap-2.5 self-end sm:self-center flex-wrap">
-                        {/* 상태 뱃지 */}
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            req.status === '승인'
-                              ? 'bg-[#d4e9e2] text-[#00754A]'
-                              : req.status === '반려'
-                              ? 'bg-rose-100 text-rose-800'
-                              : 'bg-amber-100 text-amber-900'
-                          }`}
-                        >
-                          {req.status}
-                        </span>
-
+                      {/* 우측 액션 클러스터 (방안 1: 2~3개 버튼으로 슬림화 & 일관된 규격 정렬) */}
+                      <div className="flex items-center gap-2 self-end sm:self-center flex-shrink-0 flex-wrap">
                         {/* PDF 신청서 원본 확인 버튼 */}
                         {req.pdf_url && (
                           <button
                             type="button"
-                            onClick={() => setPreviewDocRequest(req)}
-                            className="btn-pill inline-flex items-center gap-1 rounded-full border border-stone-300 bg-white px-3 py-1.5 text-xs font-bold text-stone-700 hover:bg-stone-50 transition"
-                            title="전자서명 연차신청서 원본 열람"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPreviewDocRequest(req);
+                            }}
+                            className="btn-pill h-8 inline-flex items-center gap-1.5 rounded-full border border-stone-300 bg-white px-3 text-xs font-bold text-stone-700 hover:bg-stone-50 transition shadow-2xs"
+                            title="전자서명 연차신청서 원본 양식 열람"
                           >
-                            <FileText className="h-3 w-3 text-[#00754A]" />
+                            <FileText className="h-3.5 w-3.5 text-[#00754A]" />
                             <span>신청서 보기</span>
                           </button>
                         )}
 
                         {/* 팀장용 승인 / 반려 / 재전환 / 알림메일 액션 버튼 */}
-                        {role === '팀장' && (
-                          <div className="flex items-center gap-1.5 flex-wrap">
+                        {role === '팀장' ? (
+                          <div className="flex items-center gap-2 flex-wrap">
                             {/* 1) 대기 상태: 승인 & 반려 */}
                             {req.status === '대기' && (
                               <>
                                 <button
                                   type="button"
-                                  onClick={() => handleApprove(req.id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleApprove(req.id);
+                                  }}
                                   disabled={updatingId === req.id}
-                                  className="btn-pill rounded-full bg-[#00754A] hover:bg-[#006241] px-3.5 py-1.5 text-xs font-bold text-white transition active:scale-95 disabled:opacity-50"
+                                  className="btn-pill h-8 inline-flex items-center justify-center rounded-full bg-[#00754A] hover:bg-[#006241] px-4 text-xs font-bold text-white transition active:scale-95 shadow-2xs disabled:opacity-50"
                                 >
                                   {updatingId === req.id ? '승인 중...' : '승인'}
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => setRejectingRequest(req)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setRejectingRequest(req);
+                                  }}
                                   disabled={updatingId === req.id}
-                                  className="btn-pill rounded-full border border-rose-300 text-rose-700 hover:bg-rose-50 px-3.5 py-1.5 text-xs font-bold transition active:scale-95 disabled:opacity-50"
+                                  className="btn-pill h-8 inline-flex items-center justify-center rounded-full border border-rose-300 bg-white text-rose-700 hover:bg-rose-50 px-3.5 text-xs font-bold transition active:scale-95 shadow-2xs disabled:opacity-50"
                                 >
                                   반려
                                 </button>
@@ -2214,24 +2228,30 @@ export default function Home() {
                               <>
                                 <button
                                   type="button"
-                                  onClick={() => setRejectingRequest(req)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setRejectingRequest(req);
+                                  }}
                                   disabled={updatingId === req.id}
-                                  className="btn-pill rounded-full border border-rose-300 bg-white text-rose-700 hover:bg-rose-50 px-3 py-1.5 text-xs font-bold transition active:scale-95"
+                                  className="btn-pill h-8 inline-flex items-center justify-center rounded-full border border-rose-300 bg-white text-rose-700 hover:bg-rose-50 px-3.5 text-xs font-bold transition active:scale-95 shadow-2xs"
                                   title="승인된 연차를 반려 상태로 변경하고 사유를 입력합니다"
                                 >
                                   반려로 변경
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => handleSendApprovalEmail(req)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleSendApprovalEmail(req);
+                                  }}
                                   disabled={emailSendingId === req.id}
-                                  className="btn-pill inline-flex items-center gap-1 rounded-full border border-[#00754A] bg-[#00754A]/10 text-[#00754A] hover:bg-[#00754A]/20 px-3 py-1.5 text-xs font-bold transition active:scale-95"
+                                  className="btn-pill h-8 inline-flex items-center gap-1.5 rounded-full border border-[#00754A]/30 bg-[#00754A]/10 text-[#00754A] hover:bg-[#00754A]/20 px-3 text-xs font-bold transition active:scale-95 shadow-2xs"
                                   title="사원에게 승인 알림 이메일을 전송합니다"
                                 >
                                   {emailSendingId === req.id ? (
-                                    <RefreshCw className="h-3 w-3 animate-spin" />
+                                    <RefreshCw className="h-3.5 w-3.5 animate-spin" />
                                   ) : (
-                                    <Mail className="h-3 w-3" />
+                                    <Mail className="h-3.5 w-3.5" />
                                   )}
                                   <span>알림메일</span>
                                 </button>
@@ -2243,39 +2263,49 @@ export default function Home() {
                               <>
                                 <button
                                   type="button"
-                                  onClick={() => handleApprove(req.id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleApprove(req.id);
+                                  }}
                                   disabled={updatingId === req.id}
-                                  className="btn-pill rounded-full bg-[#00754A] hover:bg-[#006241] px-3.5 py-1.5 text-xs font-bold text-white transition active:scale-95 disabled:opacity-50"
+                                  className="btn-pill h-8 inline-flex items-center justify-center rounded-full bg-[#00754A] hover:bg-[#006241] px-3.5 text-xs font-bold text-white transition active:scale-95 shadow-2xs disabled:opacity-50"
                                   title="반려된 연차를 다시 승인하고 팀장 승인 도장을 날인합니다"
                                 >
                                   {updatingId === req.id ? '승인 중...' : '승인으로 변경'}
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => handleSendRejectionEmail(req)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleSendRejectionEmail(req);
+                                  }}
                                   disabled={emailSendingId === req.id}
-                                  className="btn-pill inline-flex items-center gap-1 rounded-full border border-rose-300 bg-rose-50 text-rose-700 hover:bg-rose-100 px-3 py-1.5 text-xs font-bold transition active:scale-95"
+                                  className="btn-pill h-8 inline-flex items-center gap-1.5 rounded-full border border-rose-300 bg-rose-50 text-rose-700 hover:bg-rose-100 px-3 text-xs font-bold transition active:scale-95 shadow-2xs"
                                   title="사원에게 반려 안내 이메일을 재전송합니다"
                                 >
                                   {emailSendingId === req.id ? (
-                                    <RefreshCw className="h-3 w-3 animate-spin" />
+                                    <RefreshCw className="h-3.5 w-3.5 animate-spin" />
                                   ) : (
-                                    <Mail className="h-3 w-3" />
+                                    <Mail className="h-3.5 w-3.5" />
                                   )}
                                   <span>반려메일</span>
                                 </button>
                               </>
                             )}
                           </div>
+                        ) : (
+                          /* 일반 사원/경리일 경우 상세보기 버튼 제공 */
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedRequest(req);
+                            }}
+                            className="btn-pill h-8 inline-flex items-center justify-center rounded-full border border-stone-200 bg-white px-3.5 text-xs font-semibold text-stone-600 hover:bg-stone-50 transition shadow-2xs"
+                          >
+                            상세 정보
+                          </button>
                         )}
-
-                        <button
-                          type="button"
-                          onClick={() => setSelectedRequest(req)}
-                          className="btn-pill rounded-full border border-stone-200 px-3.5 py-1.5 text-xs font-semibold text-stone-600 hover:bg-stone-50 transition"
-                        >
-                          상세
-                        </button>
                       </div>
                     </div>
                   );
